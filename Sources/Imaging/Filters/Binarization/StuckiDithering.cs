@@ -7,6 +7,7 @@
 // Original idea from CxImage
 // http://www.codeproject.com/bitmap/cximage.asp
 //
+
 namespace AForge.Imaging.Filters
 {
     using System;
@@ -55,11 +56,12 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="StuckiDithering"/> class.
         /// </summary>
         /// 
-        public StuckiDithering( ) : base( new int[3][] {
-            new int[2] { 8, 4 },
-            new int[5] { 2, 4, 8, 4, 2 },
-            new int[5] { 1, 2, 4, 2, 1 }
-        } )
+        public StuckiDithering() : base(new int[3][]
+        {
+            new int[2] {8, 4},
+            new int[5] {2, 4, 8, 4, 2},
+            new int[5] {1, 2, 4, 2, 1}
+        })
         {
         }
     }

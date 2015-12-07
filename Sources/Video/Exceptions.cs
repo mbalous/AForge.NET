@@ -25,7 +25,9 @@ namespace AForge.Video
         /// 
         /// <param name="message">Exception's message.</param>
         /// 
-        public VideoException( string message ) :
-            base( message ) { }
+        public VideoException(string message) :
+            base(message)
+        {
+        }
     }
 }

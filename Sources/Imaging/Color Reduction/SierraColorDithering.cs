@@ -57,11 +57,13 @@ namespace AForge.Imaging.ColorReduction
         /// Initializes a new instance of the <see cref="SierraColorDithering"/> class.
         /// </summary>
         /// 
-        public SierraColorDithering( )
-            : base( new int[3][] {
-                new int[2] { 5, 3 },
-                new int[5] { 2, 4, 5, 4, 2 },
-                new int[3] { 2, 3, 2 } } )
+        public SierraColorDithering()
+            : base(new int[3][]
+            {
+                new int[2] {5, 3},
+                new int[5] {2, 4, 5, 4, 2},
+                new int[3] {2, 3, 2}
+            })
         {
         }
     }

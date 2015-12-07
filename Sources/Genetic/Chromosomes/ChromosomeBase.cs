@@ -20,12 +20,12 @@ namespace AForge.Genetic
     public abstract class ChromosomeBase : IChromosome
     {
         /// <summary>
-        /// Chromosome's fitness value.
+        /// Chromosome's fintess value.
         /// </summary>
         protected double fitness = 0;
 
         /// <summary>
-        /// Chromosome's fitness value.
+        /// Chromosome's fintess value.
         /// </summary>
         /// 
         /// <remarks><para>Fitness value (usefulness) of the chromosome calculate by calling

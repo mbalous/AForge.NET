@@ -44,7 +44,7 @@ namespace AForge.Math.Random
         ///
         public float Mean
         {
-            get { return mean;  }
+            get { return mean; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace AForge.Math.Random
         ///
         public float Variance
         {
-            get { return stdDev * stdDev; }
+            get { return stdDev*stdDev; }
         }
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace AForge.Math.Random
         /// <param name="mean">Mean value.</param>
         /// <param name="stdDev">Standard deviation value.</param>
         /// 
-        public GaussianGenerator( float mean, float stdDev ) :
-            this( mean, stdDev, 0 )
+        public GaussianGenerator(float mean, float stdDev) :
+            this(mean, stdDev, 0)
         {
         }
 
@@ -85,12 +85,12 @@ namespace AForge.Math.Random
         /// <param name="stdDev">Standard deviation value.</param>
         /// <param name="seed">Seed value to initialize random numbers generator.</param>
         /// 
-        public GaussianGenerator( float mean, float stdDev, int seed )
+        public GaussianGenerator(float mean, float stdDev, int seed)
         {
-            this.mean   = mean;
+            this.mean = mean;
             this.stdDev = stdDev;
 
-            rand = new StandardGenerator( seed );
+            rand = new StandardGenerator(seed);
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace AForge.Math.Random
         /// 
         /// <returns>Returns next random number.</returns>
         /// 
-        public float Next( )
+        public float Next()
         {
-            return (float) rand.Next( ) * stdDev + mean;
+            return (float) rand.Next()*stdDev + mean;
         }
 
         /// <summary>
@@ -113,9 +113,9 @@ namespace AForge.Math.Random
         /// <remarks>Resets random numbers generator initializing it with
         /// specified seed value.</remarks>
         /// 
-        public void SetSeed( int seed )
+        public void SetSeed(int seed)
         {
-            rand = new StandardGenerator( seed );
+            rand = new StandardGenerator(seed);
         }
     }
 }

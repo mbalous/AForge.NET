@@ -28,12 +28,14 @@ namespace AForge.Imaging.Filters
     /// <seealso cref="GrayscaleBT709"/>
     /// <seealso cref="GrayscaleRMY"/>
     ///
-    [Obsolete( "Use Grayscale.CommonAlgorithms.Y object instead" )]
+    [Obsolete("Use Grayscale.CommonAlgorithms.Y object instead")]
     public sealed class GrayscaleY : Grayscale
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GrayscaleY"/> class.
         /// </summary>
-        public GrayscaleY( ) : base( 0.299, 0.587, 0.114 ) { }
+        public GrayscaleY() : base(0.299, 0.587, 0.114)
+        {
+        }
     }
 }

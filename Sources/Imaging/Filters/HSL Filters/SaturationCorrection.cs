@@ -1,8 +1,8 @@
 // AForge Image Processing Library
 // AForge.NET framework
 //
-// Copyright © AForge.NET, 2007-2014
-// aforge.net@gmail.com
+// Copyright © AForge.NET, 2007-2011
+// contacts@aforgenet.com
 //
 
 namespace AForge.Imaging.Filters
@@ -41,7 +41,8 @@ namespace AForge.Imaging.Filters
     /// 
     public class SaturationCorrection : BaseInPlacePartialFilter
     {
-        private float adjustValue;	// [-1, 1]
+        private HSLLinear baseFilter = new HSLLinear();
+        private float adjustValue; // [-1, 1]
 
         /// <summary>
         /// Saturation adjust value, [-1, 1].
@@ -53,11 +54,26 @@ namespace AForge.Imaging.Filters
         public float AdjustValue
         {
             get { return adjustValue; }
-            set { adjustValue = Math.Max( -1.0f, Math.Min( 1.0f, value ) ); }
+            set
+            {
+                adjustValue = Math.Max(-1.0f, Math.Min(1.0f, value));
+
+                // create saturation filter
+                if (adjustValue > 0)
+                {
+                    baseFilter.InSaturation = new Range(0.0f, 1.0f - adjustValue);
+                    baseFilter.OutSaturation = new Range(adjustValue, 1.0f);
+                }
+                else
+                {
+                    baseFilter.InSaturation = new Range(-adjustValue, 1.0f);
+                    baseFilter.OutSaturation = new Range(0.0f, 1.0f + adjustValue);
+                }
+            }
         }
 
         // format translation dictionary
-        private Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>( );
+        private Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>();
 
         /// <summary>
         /// Format translations dictionary.
@@ -71,7 +87,7 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="SaturationCorrection"/> class.
         /// </summary>
         /// 
-        public SaturationCorrection( ) : this( 0.1f )
+        public SaturationCorrection() : this(0.1f)
         {
         }
 
@@ -81,14 +97,13 @@ namespace AForge.Imaging.Filters
         /// 
         /// <param name="adjustValue">Saturation adjust value.</param>
         /// 
-        public SaturationCorrection( float adjustValue )
+        public SaturationCorrection(float adjustValue)
         {
             AdjustValue = adjustValue;
 
-            formatTranslations[PixelFormat.Format24bppRgb]   = PixelFormat.Format24bppRgb;
-            formatTranslations[PixelFormat.Format32bppRgb]   = PixelFormat.Format32bppRgb;
-            formatTranslations[PixelFormat.Format32bppArgb]  = PixelFormat.Format32bppArgb;
-            formatTranslations[PixelFormat.Format32bppPArgb] = PixelFormat.Format32bppPArgb;
+            formatTranslations[PixelFormat.Format24bppRgb] = PixelFormat.Format24bppRgb;
+            formatTranslations[PixelFormat.Format32bppRgb] = PixelFormat.Format32bppRgb;
+            formatTranslations[PixelFormat.Format32bppArgb] = PixelFormat.Format32bppArgb;
         }
 
         /// <summary>
@@ -98,58 +113,9 @@ namespace AForge.Imaging.Filters
         /// <param name="image">Source image data.</param>
         /// <param name="rect">Image rectangle for processing by the filter.</param>
         ///
-        protected override unsafe void ProcessFilter( UnmanagedImage image, Rectangle rect )
+        protected override unsafe void ProcessFilter(UnmanagedImage image, Rectangle rect)
         {
-            int pixelSize = Bitmap.GetPixelFormatSize( image.PixelFormat ) / 8;
-
-            int startX  = rect.Left;
-            int startY  = rect.Top;
-            int stopX   = startX + rect.Width;
-            int stopY   = startY + rect.Height;
-            int offset  = image.Stride - rect.Width * pixelSize;
-
-            RGB rgb = new RGB( );
-            HSL hsl = new HSL( );
-
-            float desaturationChangeFactor = 1.0f + adjustValue;
-
-            // do the job
-            byte* ptr = (byte*) image.ImageData.ToPointer( );
-
-            // allign pointer to the first pixel to process
-            ptr += ( startY * image.Stride + startX * pixelSize );
-
-            // for each row
-            for ( int y = startY; y < stopY; y++ )
-            {
-                // for each pixel
-                for ( int x = startX; x < stopX; x++, ptr += pixelSize )
-                {
-                    rgb.Red   = ptr[RGB.R];
-                    rgb.Green = ptr[RGB.G];
-                    rgb.Blue  = ptr[RGB.B];
-
-                    // convert to HSL
-                    AForge.Imaging.HSL.FromRGB( rgb, hsl );
-
-                    if ( adjustValue > 0 )
-                    {
-                        hsl.Saturation += ( 1.0f - hsl.Saturation ) * adjustValue * hsl.Saturation;
-                    }
-                    else if ( adjustValue < 0 )
-                    {
-                        hsl.Saturation *= desaturationChangeFactor;
-                    }
-
-                    // convert back to RGB
-                    AForge.Imaging.HSL.ToRGB( hsl, rgb );
-
-                    ptr[RGB.R] = rgb.Red;
-                    ptr[RGB.G] = rgb.Green;
-                    ptr[RGB.B] = rgb.Blue;
-                }
-                ptr += offset;
-            }
+            baseFilter.ApplyInPlace(image, rect);
         }
     }
 }

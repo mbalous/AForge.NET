@@ -17,8 +17,8 @@ namespace AForge.Video.DirectShow.Internals
     /// handler to use in the client process, as it is used in the default implementation of marshaling.
     /// </summary>
     [ComImport,
-    Guid("0000010c-0000-0000-C000-000000000046"),
-    InterfaceType(ComInterfaceType.InterfaceIsDual)]
+     Guid("0000010c-0000-0000-C000-000000000046"),
+     InterfaceType(ComInterfaceType.InterfaceIsDual)]
     internal interface IPersist
     {
         /// <summary>

@@ -17,5 +17,5 @@ namespace AForge
     /// <param name="sender">Event sender.</param>
     /// <param name="eventArgs">Event arguments containing details about the transferred message.</param>
     ///
-    public delegate void MessageTransferHandler( object sender, CommunicationBufferEventArgs eventArgs );
+    public delegate void MessageTransferHandler(object sender, CommunicationBufferEventArgs eventArgs);
 }

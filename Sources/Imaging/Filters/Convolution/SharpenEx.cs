@@ -7,6 +7,7 @@
 // Original idea of the SharpenEx found in Paint.NET project
 // http://www.eecs.wsu.edu/paint.net/
 //
+
 namespace AForge.Imaging.Filters
 {
     using System;
@@ -48,8 +49,8 @@ namespace AForge.Imaging.Filters
     ///
     public class GaussianSharpen : Convolution
     {
-        private double      sigma = 1.4;
-        private int         size = 5;
+        private double sigma = 1.4;
+        private int size = 5;
 
         /// <summary>
         /// Gaussian sigma value, [0.5, 5.0].
@@ -67,13 +68,13 @@ namespace AForge.Imaging.Filters
             set
             {
                 // get new sigma value
-                sigma = Math.Max( 0.5, Math.Min( 5.0, value ) );
+                sigma = Math.Max(0.5, Math.Min(5.0, value));
                 // create filter
-                CreateFilter( );
+                CreateFilter();
             }
         }
 
-         /// <summary>
+        /// <summary>
         /// Kernel size, [3, 5].
         /// </summary>
         /// 
@@ -87,8 +88,8 @@ namespace AForge.Imaging.Filters
             get { return size; }
             set
             {
-                size = Math.Max( 3, Math.Min( 21, value | 1 ) );
-                CreateFilter( );
+                size = Math.Max(3, Math.Min(21, value | 1));
+                CreateFilter();
             }
         }
 
@@ -96,9 +97,9 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="GaussianSharpen"/> class.
         /// </summary>
         /// 
-        public GaussianSharpen( )
+        public GaussianSharpen()
         {
-            CreateFilter( );
+            CreateFilter();
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace AForge.Imaging.Filters
         /// 
         /// <param name="sigma">Gaussian sigma value.</param>
         /// 
-        public GaussianSharpen( double sigma )
+        public GaussianSharpen(double sigma)
         {
             Sigma = sigma;
         }
@@ -119,22 +120,23 @@ namespace AForge.Imaging.Filters
         /// <param name="sigma">Gaussian sigma value.</param>
         /// <param name="size">Kernel size.</param>
         /// 
-        public GaussianSharpen( double sigma, int size )
+        public GaussianSharpen(double sigma, int size)
         {
             Sigma = sigma;
             Size = size;
         }
 
         // Private members
+
         #region Private Members
 
         // Create Gaussian filter
-        private void CreateFilter( )
+        private void CreateFilter()
         {
             // create Gaussian function
-            AForge.Math.Gaussian gaus = new AForge.Math.Gaussian( sigma );
+            AForge.Math.Gaussian gaus = new AForge.Math.Gaussian(sigma);
             // create kernel
-            double[,] kernel = gaus.Kernel2D( size );
+            double[,] kernel = gaus.Kernel2D(size);
             double min = kernel[0, 0];
             // integer kernel
             int[,] intKernel = new int[size, size];
@@ -142,13 +144,13 @@ namespace AForge.Imaging.Filters
             int divisor = 0;
 
             // calculate integer kernel
-            for ( int i = 0; i < size; i++ )
+            for (int i = 0; i < size; i++)
             {
-                for ( int j = 0; j < size; j++ )
+                for (int j = 0; j < size; j++)
                 {
-                    double v = kernel[i, j] / min;
+                    double v = kernel[i, j]/min;
 
-                    if ( v > ushort.MaxValue )
+                    if (v > ushort.MaxValue)
                     {
                         v = ushort.MaxValue;
                     }
@@ -162,14 +164,14 @@ namespace AForge.Imaging.Filters
             // recalc kernel
             int c = size >> 1;
 
-            for ( int i = 0; i < size; i++ )
+            for (int i = 0; i < size; i++)
             {
-                for ( int j = 0; j < size; j++ )
+                for (int j = 0; j < size; j++)
                 {
-                    if ( ( i == c ) && ( j == c ) )
+                    if ((i == c) && (j == c))
                     {
                         // calculate central value
-                        intKernel[i, j] = 2 * sum - intKernel[i, j];
+                        intKernel[i, j] = 2*sum - intKernel[i, j];
                     }
                     else
                     {
@@ -186,6 +188,7 @@ namespace AForge.Imaging.Filters
             this.Kernel = intKernel;
             this.Divisor = divisor;
         }
+
         #endregion
     }
 }

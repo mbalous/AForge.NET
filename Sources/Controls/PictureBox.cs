@@ -57,19 +57,19 @@ namespace AForge.Controls
             {
                 // check source image format
                 if (
-                    ( value != null ) && ( value is Bitmap ) &&
-                    ( ( value.PixelFormat == PixelFormat.Format16bppGrayScale ) ||
-                      ( value.PixelFormat == PixelFormat.Format48bppRgb) || 
-                      ( value.PixelFormat == PixelFormat.Format64bppArgb ) ) )
-                {   
+                    (value != null) && (value is Bitmap) &&
+                    ((value.PixelFormat == PixelFormat.Format16bppGrayScale) ||
+                     (value.PixelFormat == PixelFormat.Format48bppRgb) ||
+                     (value.PixelFormat == PixelFormat.Format64bppArgb)))
+                {
                     // convert and display image
-                    Image tempImage = AForge.Imaging.Image.Convert16bppTo8bpp( (Bitmap) value );
+                    Image tempImage = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap) value);
                     base.Image = tempImage;
 
                     // dispose previous image if required
-                    if ( convertedImage != null )
+                    if (convertedImage != null)
                     {
-                        convertedImage.Dispose( );
+                        convertedImage.Dispose();
                     }
 
                     convertedImage = tempImage;
@@ -82,7 +82,5 @@ namespace AForge.Controls
                 sourceImage = value;
             }
         }
-
-
     }
 }

@@ -31,7 +31,7 @@ namespace AForge.Imaging
         /// 
         /// <returns>Returns list of found corners (X-Y coordinates).</returns>
         /// 
-        List<IntPoint> ProcessImage( Bitmap image );
+        List<IntPoint> ProcessImage(Bitmap image);
 
         /// <summary>
         /// Process image looking for corners.
@@ -41,7 +41,7 @@ namespace AForge.Imaging
         /// 
         /// <returns>Returns list of found corners (X-Y coordinates).</returns>
         /// 
-        List<IntPoint> ProcessImage( BitmapData imageData );
+        List<IntPoint> ProcessImage(BitmapData imageData);
 
         /// <summary>
         /// Process image looking for corners.
@@ -51,6 +51,6 @@ namespace AForge.Imaging
         /// 
         /// <returns>Returns list of found corners (X-Y coordinates).</returns>
         /// 
-        List<IntPoint> ProcessImage( UnmanagedImage image );
+        List<IntPoint> ProcessImage(UnmanagedImage image);
     }
 }

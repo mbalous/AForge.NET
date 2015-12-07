@@ -17,7 +17,7 @@ namespace AForge.Video
     /// <param name="sender">Sender object.</param>
     /// <param name="eventArgs">Event arguments.</param>
     /// 
-    public delegate void NewFrameEventHandler( object sender, NewFrameEventArgs eventArgs );
+    public delegate void NewFrameEventHandler(object sender, NewFrameEventArgs eventArgs);
 
     /// <summary>
     /// Delegate for video source error event handler.
@@ -26,7 +26,7 @@ namespace AForge.Video
     /// <param name="sender">Sender object.</param>
     /// <param name="eventArgs">Event arguments.</param>
     /// 
-    public delegate void VideoSourceErrorEventHandler( object sender, VideoSourceErrorEventArgs eventArgs );
+    public delegate void VideoSourceErrorEventHandler(object sender, VideoSourceErrorEventArgs eventArgs);
 
     /// <summary>
     /// Delegate for playing finished event handler.
@@ -35,7 +35,7 @@ namespace AForge.Video
     /// <param name="sender">Sender object.</param>
     /// <param name="reason">Reason of finishing video playing.</param>
     /// 
-    public delegate void PlayingFinishedEventHandler( object sender, ReasonToFinishPlaying reason );
+    public delegate void PlayingFinishedEventHandler(object sender, ReasonToFinishPlaying reason);
 
     /// <summary>
     /// Reason of finishing video playing.
@@ -50,14 +50,17 @@ namespace AForge.Video
         /// Video playing has finished because it end was reached.
         /// </summary>
         EndOfStreamReached,
+
         /// <summary>
         /// Video playing has finished because it was stopped by user.
         /// </summary>
         StoppedByUser,
+
         /// <summary>
         /// Video playing has finished because the device was lost (unplugged).
         /// </summary>
         DeviceLost,
+
         /// <summary>
         /// Video playing has finished because of some error happened the video source (camera, stream, file, etc.).
         /// A error reporting event usually is fired to provide error information.
@@ -79,7 +82,7 @@ namespace AForge.Video
         /// 
         /// <param name="frame">New frame.</param>
         /// 
-        public NewFrameEventArgs( System.Drawing.Bitmap frame )
+        public NewFrameEventArgs(System.Drawing.Bitmap frame)
         {
             this.frame = frame;
         }
@@ -108,7 +111,7 @@ namespace AForge.Video
         /// 
         /// <param name="description">Error description.</param>
         /// 
-        public VideoSourceErrorEventArgs( string description )
+        public VideoSourceErrorEventArgs(string description)
         {
             this.description = description;
         }

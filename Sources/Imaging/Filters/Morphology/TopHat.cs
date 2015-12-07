@@ -45,11 +45,11 @@ namespace AForge.Imaging.Filters
     /// 
     public class TopHat : BaseInPlaceFilter
     {
-        private Opening opening = new Opening( );
-        private Subtract subtract = new Subtract( );
+        private Opening opening = new Opening();
+        private Subtract subtract = new Subtract();
 
         // private format translation dictionary
-        private Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>( );
+        private Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>();
 
         /// <summary>
         /// Format translations dictionary.
@@ -63,13 +63,13 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="TopHat"/> class.
         /// </summary>
         /// 
-        public TopHat( )
+        public TopHat()
         {
             // initialize format translation dictionary
-            formatTranslations[PixelFormat.Format8bppIndexed]    = PixelFormat.Format8bppIndexed;
-            formatTranslations[PixelFormat.Format24bppRgb]       = PixelFormat.Format24bppRgb;
+            formatTranslations[PixelFormat.Format8bppIndexed] = PixelFormat.Format8bppIndexed;
+            formatTranslations[PixelFormat.Format24bppRgb] = PixelFormat.Format24bppRgb;
             formatTranslations[PixelFormat.Format16bppGrayScale] = PixelFormat.Format16bppGrayScale;
-            formatTranslations[PixelFormat.Format48bppRgb]       = PixelFormat.Format48bppRgb;
+            formatTranslations[PixelFormat.Format48bppRgb] = PixelFormat.Format48bppRgb;
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace AForge.Imaging.Filters
         /// 
         /// <param name="se">Structuring element to pass to <see cref="Opening"/> operator.</param>
         /// 
-        public TopHat( short[,] se ) : this( )
+        public TopHat(short[,] se) : this()
         {
-            opening = new Opening( se );
+            opening = new Opening(se);
         }
 
         /// <summary>
@@ -89,15 +89,15 @@ namespace AForge.Imaging.Filters
         /// 
         /// <param name="image">Source image data.</param>
         ///
-        protected override unsafe void ProcessFilter( UnmanagedImage image )
+        protected override unsafe void ProcessFilter(UnmanagedImage image)
         {
             // perform opening on the source image
-            UnmanagedImage openedImage = opening.Apply( image );
+            UnmanagedImage openedImage = opening.Apply(image);
             // subtract opened image from source image
             subtract.UnmanagedOverlayImage = openedImage;
-            subtract.ApplyInPlace( image );
+            subtract.ApplyInPlace(image);
 
-            openedImage.Dispose( );
+            openedImage.Dispose();
         }
     }
 }

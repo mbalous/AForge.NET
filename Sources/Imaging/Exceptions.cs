@@ -25,7 +25,9 @@ namespace AForge.Imaging
         /// <summary>
         /// Initializes a new instance of the <see cref="UnsupportedImageFormatException"/> class.
         /// </summary>
-        public UnsupportedImageFormatException( ) { }
+        public UnsupportedImageFormatException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnsupportedImageFormatException"/> class.
@@ -33,8 +35,10 @@ namespace AForge.Imaging
         /// 
         /// <param name="message">Message providing some additional information.</param>
         /// 
-        public UnsupportedImageFormatException( string message ) :
-            base( message ) { }
+        public UnsupportedImageFormatException(string message) :
+            base(message)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnsupportedImageFormatException"/> class.
@@ -43,8 +47,10 @@ namespace AForge.Imaging
         /// <param name="message">Message providing some additional information.</param>
         /// <param name="paramName">Name of the invalid parameter.</param>
         /// 
-        public UnsupportedImageFormatException( string message, string paramName ) :
-            base( message, paramName ) { }
+        public UnsupportedImageFormatException(string message, string paramName) :
+            base(message, paramName)
+        {
+        }
     }
 
     /// <summary>
@@ -63,7 +69,9 @@ namespace AForge.Imaging
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidImagePropertiesException"/> class.
         /// </summary>
-        public InvalidImagePropertiesException( ) { }
+        public InvalidImagePropertiesException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidImagePropertiesException"/> class.
@@ -71,8 +79,10 @@ namespace AForge.Imaging
         /// 
         /// <param name="message">Message providing some additional information.</param>
         /// 
-        public InvalidImagePropertiesException( string message ) :
-            base( message ) { }
+        public InvalidImagePropertiesException(string message) :
+            base(message)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidImagePropertiesException"/> class.
@@ -81,14 +91,19 @@ namespace AForge.Imaging
         /// <param name="message">Message providing some additional information.</param>
         /// <param name="paramName">Name of the invalid parameter.</param>
         /// 
-        public InvalidImagePropertiesException( string message, string paramName ) :
-            base( message, paramName ) { }
+        public InvalidImagePropertiesException(string message, string paramName) :
+            base(message, paramName)
+        {
+        }
     }
 
     // Some common exception messages
     internal static class ExceptionMessage
     {
-        public const string ColorHistogramException = "Cannot access color histogram since the last processed image was grayscale.";
-        public const string GrayHistogramException = "Cannot access gray histogram since the last processed image was color.";
+        public const string ColorHistogramException =
+            "Cannot access color histogram since the last processed image was grayscale.";
+
+        public const string GrayHistogramException =
+            "Cannot access gray histogram since the last processed image was color.";
     }
 }

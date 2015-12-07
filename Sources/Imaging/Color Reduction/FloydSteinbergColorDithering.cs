@@ -62,10 +62,12 @@ namespace AForge.Imaging.ColorReduction
         /// Initializes a new instance of the <see cref="FloydSteinbergColorDithering"/> class.
         /// </summary>
         /// 
-        public FloydSteinbergColorDithering( )
-            : base( new int[2][] {
-                new int[1] { 7 },
-                new int[3] { 3, 5, 1 } } )
+        public FloydSteinbergColorDithering()
+            : base(new int[2][]
+            {
+                new int[1] {7},
+                new int[3] {3, 5, 1}
+            })
         {
         }
     }

@@ -52,29 +52,29 @@ namespace AForge.Math.Random
         ///
         public float Variance
         {
-            get { return 1f / 12; }
+            get { return 1f/12; }
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="UniformOneGenerator"/> class.
+        /// Initializes a new instance of the <see cref="UniformOneGenerator"/> class.
         /// </summary>
         /// 
         /// <remarks>Initializes random numbers generator with zero seed.</remarks>
         /// 
-        public UniformOneGenerator( )
+        public UniformOneGenerator()
         {
-            rand = new ThreadSafeRandom( 0 );
+            rand = new ThreadSafeRandom(0);
         }
 
         /// <summary>
-		/// Initializes a new instance of the <see cref="UniformOneGenerator"/> class.
+        /// Initializes a new instance of the <see cref="UniformOneGenerator"/> class.
         /// </summary>
         /// 
         /// <param name="seed">Seed value to initialize random numbers generator.</param>
         /// 
-        public UniformOneGenerator( int seed )
+        public UniformOneGenerator(int seed)
         {
-            rand = new ThreadSafeRandom( seed );
+            rand = new ThreadSafeRandom(seed);
         }
 
         /// <summary>
@@ -83,9 +83,9 @@ namespace AForge.Math.Random
         /// 
         /// <returns>Returns next random number.</returns>
         /// 
-        public float Next( )
+        public float Next()
         {
-            return (float) rand.NextDouble( );
+            return (float) rand.NextDouble();
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace AForge.Math.Random
         /// <remarks>Resets random numbers generator initializing it with
         /// specified seed value.</remarks>
         /// 
-        public void SetSeed( int seed )
+        public void SetSeed(int seed)
         {
-            rand = new ThreadSafeRandom( seed );
+            rand = new ThreadSafeRandom(seed);
         }
     }
 }

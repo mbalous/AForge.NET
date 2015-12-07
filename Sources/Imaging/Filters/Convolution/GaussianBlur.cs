@@ -51,7 +51,7 @@ namespace AForge.Imaging.Filters
     public sealed class GaussianBlur : Convolution
     {
         private double sigma = 1.4;
-        private int    size = 5;
+        private int size = 5;
 
         /// <summary>
         /// Gaussian sigma value, [0.5, 5.0].
@@ -69,9 +69,9 @@ namespace AForge.Imaging.Filters
             set
             {
                 // get new sigma value
-                sigma = Math.Max( 0.5, Math.Min( 5.0, value ) );
+                sigma = Math.Max(0.5, Math.Min(5.0, value));
                 // create filter
-                CreateFilter( );
+                CreateFilter();
             }
         }
 
@@ -89,8 +89,8 @@ namespace AForge.Imaging.Filters
             get { return size; }
             set
             {
-                size = Math.Max( 3, Math.Min( 21, value | 1 ) );
-                CreateFilter( );
+                size = Math.Max(3, Math.Min(21, value | 1));
+                CreateFilter();
             }
         }
 
@@ -98,9 +98,9 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="GaussianBlur"/> class.
         /// </summary>
         /// 
-        public GaussianBlur( )
+        public GaussianBlur()
         {
-            CreateFilter( );
+            CreateFilter();
             base.ProcessAlpha = true;
         }
 
@@ -110,7 +110,7 @@ namespace AForge.Imaging.Filters
         /// 
         /// <param name="sigma">Gaussian sigma value.</param>
         /// 
-        public GaussianBlur( double sigma )
+        public GaussianBlur(double sigma)
         {
             Sigma = sigma;
             base.ProcessAlpha = true;
@@ -123,7 +123,7 @@ namespace AForge.Imaging.Filters
         /// <param name="sigma">Gaussian sigma value.</param>
         /// <param name="size">Kernel size.</param>
         /// 
-        public GaussianBlur( double sigma, int size )
+        public GaussianBlur(double sigma, int size)
         {
             Sigma = sigma;
             Size = size;
@@ -131,27 +131,28 @@ namespace AForge.Imaging.Filters
         }
 
         // Private members
+
         #region Private Members
 
         // Create Gaussian filter
-        private void CreateFilter( )
+        private void CreateFilter()
         {
             // create Gaussian function
-            AForge.Math.Gaussian gaus = new AForge.Math.Gaussian( sigma );
+            AForge.Math.Gaussian gaus = new AForge.Math.Gaussian(sigma);
             // create kernel
-            double[,] kernel = gaus.Kernel2D( size );
+            double[,] kernel = gaus.Kernel2D(size);
             double min = kernel[0, 0];
             // integer kernel
             int[,] intKernel = new int[size, size];
             int divisor = 0;
 
-            for ( int i = 0; i < size; i++ )
+            for (int i = 0; i < size; i++)
             {
-                for ( int j = 0; j < size; j++ )
+                for (int j = 0; j < size; j++)
                 {
-                    double v = kernel[i, j] / min;
+                    double v = kernel[i, j]/min;
 
-                    if ( v > ushort.MaxValue )
+                    if (v > ushort.MaxValue)
                     {
                         v = ushort.MaxValue;
                     }
@@ -166,6 +167,7 @@ namespace AForge.Imaging.Filters
             this.Kernel = intKernel;
             this.Divisor = divisor;
         }
+
         #endregion
     }
 }

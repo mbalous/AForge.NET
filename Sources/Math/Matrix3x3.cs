@@ -24,10 +24,12 @@ namespace AForge.Math
         /// Row 0 column 0 element of the matrix.
         /// </summary>
         public float V00;
+
         /// <summary>
         /// Row 0 column 1 element of the matrix.
         /// </summary>
         public float V01;
+
         /// <summary>
         /// Row 0 column 2 element of the matrix.
         /// </summary>
@@ -37,10 +39,12 @@ namespace AForge.Math
         /// Row 1 column 0 element of the matrix.
         /// </summary>
         public float V10;
+
         /// <summary>
         /// Row 1 column 1 element of the matrix.
         /// </summary>
         public float V11;
+
         /// <summary>
         /// Row 1 column 2 element of the matrix.
         /// </summary>
@@ -50,10 +54,12 @@ namespace AForge.Math
         /// Row 2 column 0 element of the matrix.
         /// </summary>
         public float V20;
+
         /// <summary>
         /// Row 2 column 1 element of the matrix.
         /// </summary>
         public float V21;
+
         /// <summary>
         /// Row 2 column 2 element of the matrix.
         /// </summary>
@@ -66,7 +72,7 @@ namespace AForge.Math
         {
             get
             {
-                Matrix3x3 m = new Matrix3x3( );
+                Matrix3x3 m = new Matrix3x3();
                 m.V00 = m.V11 = m.V22 = 1;
                 return m;
             }
@@ -80,8 +86,8 @@ namespace AForge.Math
             get
             {
                 return
-                    V00 * V11 * V22 + V01 * V12 * V20 + V02 * V10 * V21 -
-                    V00 * V12 * V21 - V01 * V10 * V22 - V02 * V11 * V20;
+                    V00*V11*V22 + V01*V12*V20 + V02*V10*V21 -
+                    V00*V12*V21 - V01*V10*V22 - V02*V11*V20;
             }
         }
 
@@ -91,7 +97,7 @@ namespace AForge.Math
         /// 
         /// <returns>Returns array which contains all elements of the matrix in the row-major order.</returns>
         /// 
-        public float[] ToArray( )
+        public float[] ToArray()
         {
             return new float[]
             {
@@ -107,12 +113,12 @@ namespace AForge.Math
         /// 
         /// <returns>Returns rotation matrix to rotate an object around Y axis.</returns>
         /// 
-        public static Matrix3x3 CreateRotationY( float radians )
+        public static Matrix3x3 CreateRotationY(float radians)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            float cos = (float) System.Math.Cos(radians);
+            float sin = (float) System.Math.Sin(radians);
 
             m.V00 = m.V22 = cos;
             m.V02 = sin;
@@ -130,12 +136,12 @@ namespace AForge.Math
         /// 
         /// <returns>Returns rotation matrix to rotate an object around X axis.</returns>
         /// 
-        public static Matrix3x3 CreateRotationX( float radians )
+        public static Matrix3x3 CreateRotationX(float radians)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            float cos = (float) System.Math.Cos(radians);
+            float sin = (float) System.Math.Sin(radians);
 
             m.V11 = m.V22 = cos;
             m.V12 = -sin;
@@ -153,12 +159,12 @@ namespace AForge.Math
         /// 
         /// <returns>Returns rotation matrix to rotate an object around Z axis.</returns>
         /// 
-        public static Matrix3x3 CreateRotationZ( float radians )
+        public static Matrix3x3 CreateRotationZ(float radians)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            float cos = (float) System.Math.Cos( radians );
-            float sin = (float) System.Math.Sin( radians );
+            float cos = (float) System.Math.Cos(radians);
+            float sin = (float) System.Math.Sin(radians);
 
             m.V00 = m.V11 = cos;
             m.V01 = -sin;
@@ -184,9 +190,9 @@ namespace AForge.Math
         /// Y axis.</note></para>
         /// </remarks>
         /// 
-        public static Matrix3x3 CreateFromYawPitchRoll( float yaw, float pitch, float roll )
+        public static Matrix3x3 CreateFromYawPitchRoll(float yaw, float pitch, float roll)
         {
-            return ( CreateRotationY( yaw ) * CreateRotationX( pitch ) ) * CreateRotationZ( roll );
+            return (CreateRotationY(yaw)*CreateRotationX(pitch))*CreateRotationZ(roll);
         }
 
         /// <summary>
@@ -223,11 +229,11 @@ namespace AForge.Math
         /// </code>
         /// </remarks>
         /// 
-        public void ExtractYawPitchRoll( out float yaw, out float pitch, out float roll )
+        public void ExtractYawPitchRoll(out float yaw, out float pitch, out float roll)
         {
-            yaw   = (float) Math.Atan2( V02, V22 );
-            pitch = (float) Math.Asin( -V12 );
-            roll  = (float) Math.Atan2( V10, V11 );
+            yaw = (float) Math.Atan2(V02, V22);
+            pitch = (float) Math.Asin(-V12);
+            roll = (float) Math.Atan2(V10, V11);
         }
 
         /// <summary>
@@ -240,9 +246,9 @@ namespace AForge.Math
         /// 
         /// <returns>Returns a matrix from specified rows.</returns>
         /// 
-        public static Matrix3x3 CreateFromRows( Vector3 row0, Vector3 row1, Vector3 row2 )
+        public static Matrix3x3 CreateFromRows(Vector3 row0, Vector3 row1, Vector3 row2)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = row0.X;
             m.V01 = row0.Y;
@@ -269,9 +275,9 @@ namespace AForge.Math
         /// 
         /// <returns>Returns a matrix from specified columns.</returns>
         /// 
-        public static Matrix3x3 CreateFromColumns( Vector3 column0, Vector3 column1, Vector3 column2 )
+        public static Matrix3x3 CreateFromColumns(Vector3 column0, Vector3 column1, Vector3 column2)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = column0.X;
             m.V10 = column0.Y;
@@ -296,9 +302,9 @@ namespace AForge.Math
         /// 
         /// <returns>Returns a diagonal matrix.</returns>
         /// 
-        public static Matrix3x3 CreateDiagonal( Vector3 vector )
+        public static Matrix3x3 CreateDiagonal(Vector3 vector)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = vector.X;
             m.V11 = vector.Y;
@@ -317,13 +323,14 @@ namespace AForge.Math
         /// 
         /// <exception cref="ArgumentException">Invalid row index was specified.</exception>
         /// 
-        public Vector3 GetRow( int index )
+        public Vector3 GetRow(int index)
         {
-            if ( ( index < 0 ) || ( index > 2 ) )
-                throw new ArgumentException( "Invalid row index was specified.", "index" );
+            if ((index < 0) || (index > 2))
+                throw new ArgumentException("Invalid row index was specified.", "index");
 
-            return ( index == 0 ) ? new Vector3( V00, V01, V02 ) :
-                   ( index == 1 ) ? new Vector3( V10, V11, V12 ) : new Vector3( V20, V21, V22 );
+            return (index == 0)
+                ? new Vector3(V00, V01, V02)
+                : (index == 1) ? new Vector3(V10, V11, V12) : new Vector3(V20, V21, V22);
         }
 
         /// <summary>
@@ -336,13 +343,14 @@ namespace AForge.Math
         /// 
         /// <exception cref="ArgumentException">Invalid column index was specified.</exception>
         /// 
-        public Vector3 GetColumn( int index )
+        public Vector3 GetColumn(int index)
         {
-            if ( ( index < 0 ) || ( index > 2 ) )
-                throw new ArgumentException( "Invalid column index was specified.", "index" );
+            if ((index < 0) || (index > 2))
+                throw new ArgumentException("Invalid column index was specified.", "index");
 
-            return ( index == 0 ) ? new Vector3( V00, V10, V20 ) :
-                   ( index == 1 ) ? new Vector3( V01, V11, V21 ) : new Vector3( V02, V12, V22 );
+            return (index == 0)
+                ? new Vector3(V00, V10, V20)
+                : (index == 1) ? new Vector3(V01, V11, V21) : new Vector3(V02, V12, V22);
         }
 
         /// <summary>
@@ -354,21 +362,21 @@ namespace AForge.Math
         /// 
         /// <returns>Return new matrix, which the result of multiplication of the two specified matrices.</returns>
         /// 
-        public static Matrix3x3 operator *( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static Matrix3x3 operator *(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            m.V00 = matrix1.V00 * matrix2.V00 + matrix1.V01 * matrix2.V10 + matrix1.V02 * matrix2.V20;
-            m.V01 = matrix1.V00 * matrix2.V01 + matrix1.V01 * matrix2.V11 + matrix1.V02 * matrix2.V21;
-            m.V02 = matrix1.V00 * matrix2.V02 + matrix1.V01 * matrix2.V12 + matrix1.V02 * matrix2.V22;
+            m.V00 = matrix1.V00*matrix2.V00 + matrix1.V01*matrix2.V10 + matrix1.V02*matrix2.V20;
+            m.V01 = matrix1.V00*matrix2.V01 + matrix1.V01*matrix2.V11 + matrix1.V02*matrix2.V21;
+            m.V02 = matrix1.V00*matrix2.V02 + matrix1.V01*matrix2.V12 + matrix1.V02*matrix2.V22;
 
-            m.V10 = matrix1.V10 * matrix2.V00 + matrix1.V11 * matrix2.V10 + matrix1.V12 * matrix2.V20;
-            m.V11 = matrix1.V10 * matrix2.V01 + matrix1.V11 * matrix2.V11 + matrix1.V12 * matrix2.V21;
-            m.V12 = matrix1.V10 * matrix2.V02 + matrix1.V11 * matrix2.V12 + matrix1.V12 * matrix2.V22;
+            m.V10 = matrix1.V10*matrix2.V00 + matrix1.V11*matrix2.V10 + matrix1.V12*matrix2.V20;
+            m.V11 = matrix1.V10*matrix2.V01 + matrix1.V11*matrix2.V11 + matrix1.V12*matrix2.V21;
+            m.V12 = matrix1.V10*matrix2.V02 + matrix1.V11*matrix2.V12 + matrix1.V12*matrix2.V22;
 
-            m.V20 = matrix1.V20 * matrix2.V00 + matrix1.V21 * matrix2.V10 + matrix1.V22 * matrix2.V20;
-            m.V21 = matrix1.V20 * matrix2.V01 + matrix1.V21 * matrix2.V11 + matrix1.V22 * matrix2.V21;
-            m.V22 = matrix1.V20 * matrix2.V02 + matrix1.V21 * matrix2.V12 + matrix1.V22 * matrix2.V22;
+            m.V20 = matrix1.V20*matrix2.V00 + matrix1.V21*matrix2.V10 + matrix1.V22*matrix2.V20;
+            m.V21 = matrix1.V20*matrix2.V01 + matrix1.V21*matrix2.V11 + matrix1.V22*matrix2.V21;
+            m.V22 = matrix1.V20*matrix2.V02 + matrix1.V21*matrix2.V12 + matrix1.V22*matrix2.V22;
 
             return m;
         }
@@ -382,9 +390,9 @@ namespace AForge.Math
         /// 
         /// <returns>Return new matrix, which the result of multiplication of the two specified matrices.</returns>
         /// 
-        public static Matrix3x3 Multiply( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static Matrix3x3 Multiply(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
-            return matrix1 * matrix2;
+            return matrix1*matrix2;
         }
 
         /// <summary>
@@ -397,9 +405,9 @@ namespace AForge.Math
         /// <returns>Returns a matrix which components are equal to sum of corresponding
         /// components of the two specified matrices.</returns>
         ///
-        public static Matrix3x3 operator +( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static Matrix3x3 operator +(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = matrix1.V00 + matrix2.V00;
             m.V01 = matrix1.V01 + matrix2.V01;
@@ -426,7 +434,7 @@ namespace AForge.Math
         /// <returns>Returns a matrix which components are equal to sum of corresponding
         /// components of the two specified matrices.</returns>
         ///
-        public static Matrix3x3 Add( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static Matrix3x3 Add(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
             return matrix1 + matrix2;
         }
@@ -441,9 +449,9 @@ namespace AForge.Math
         /// <returns>Returns a matrix which components are equal to difference of corresponding
         /// components of the two specified matrices.</returns>
         ///
-        public static Matrix3x3 operator -( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static Matrix3x3 operator -(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = matrix1.V00 - matrix2.V00;
             m.V01 = matrix1.V01 - matrix2.V01;
@@ -470,7 +478,7 @@ namespace AForge.Math
         /// <returns>Returns a matrix which components are equal to difference of corresponding
         /// components of the two specified matrices.</returns>
         ///
-        public static Matrix3x3 Subtract( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static Matrix3x3 Subtract(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
             return matrix1 - matrix2;
         }
@@ -485,12 +493,12 @@ namespace AForge.Math
         /// <returns>Returns new vector which is the result of multiplication of the specified matrix
         /// by the specified vector.</returns>
         ///
-        public static Vector3 operator *( Matrix3x3 matrix, Vector3 vector )
+        public static Vector3 operator *(Matrix3x3 matrix, Vector3 vector)
         {
             return new Vector3(
-                matrix.V00 * vector.X + matrix.V01 * vector.Y + matrix.V02 * vector.Z,
-                matrix.V10 * vector.X + matrix.V11 * vector.Y + matrix.V12 * vector.Z,
-                matrix.V20 * vector.X + matrix.V21 * vector.Y + matrix.V22 * vector.Z );
+                matrix.V00*vector.X + matrix.V01*vector.Y + matrix.V02*vector.Z,
+                matrix.V10*vector.X + matrix.V11*vector.Y + matrix.V12*vector.Z,
+                matrix.V20*vector.X + matrix.V21*vector.Y + matrix.V22*vector.Z);
         }
 
         /// <summary>
@@ -503,9 +511,9 @@ namespace AForge.Math
         /// <returns>Returns new vector which is the result of multiplication of the specified matrix
         /// by the specified vector.</returns>
         ///
-        public static Vector3 Multiply( Matrix3x3 matrix, Vector3 vector )
+        public static Vector3 Multiply(Matrix3x3 matrix, Vector3 vector)
         {
-            return matrix * vector;
+            return matrix*vector;
         }
 
         /// <summary>
@@ -518,21 +526,21 @@ namespace AForge.Math
         /// <returns>Returns new matrix with all components equal to corresponding components of the
         /// specified matrix multiples by the specified factor.</returns>
         /// 
-        public static Matrix3x3 operator *( Matrix3x3 matrix, float factor )
+        public static Matrix3x3 operator *(Matrix3x3 matrix, float factor)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            m.V00 = matrix.V00 * factor;
-            m.V01 = matrix.V01 * factor;
-            m.V02 = matrix.V02 * factor;
+            m.V00 = matrix.V00*factor;
+            m.V01 = matrix.V01*factor;
+            m.V02 = matrix.V02*factor;
 
-            m.V10 = matrix.V10 * factor;
-            m.V11 = matrix.V11 * factor;
-            m.V12 = matrix.V12 * factor;
+            m.V10 = matrix.V10*factor;
+            m.V11 = matrix.V11*factor;
+            m.V12 = matrix.V12*factor;
 
-            m.V20 = matrix.V20 * factor;
-            m.V21 = matrix.V21 * factor;
-            m.V22 = matrix.V22 * factor;
+            m.V20 = matrix.V20*factor;
+            m.V21 = matrix.V21*factor;
+            m.V22 = matrix.V22*factor;
 
             return m;
         }
@@ -547,9 +555,9 @@ namespace AForge.Math
         /// <returns>Returns new matrix with all components equal to corresponding components of the
         /// specified matrix multiples by the specified factor.</returns>
         /// 
-        public static Matrix3x3 Multiply( Matrix3x3 matrix, float factor )
+        public static Matrix3x3 Multiply(Matrix3x3 matrix, float factor)
         {
-            return matrix * factor;
+            return matrix*factor;
         }
 
         /// <summary>
@@ -562,9 +570,9 @@ namespace AForge.Math
         /// <returns>Returns new matrix with all components equal to corresponding components of the
         /// specified matrix increased by the specified value.</returns>
         /// 
-        public static Matrix3x3 operator +( Matrix3x3 matrix, float value )
+        public static Matrix3x3 operator +(Matrix3x3 matrix, float value)
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = matrix.V00 + value;
             m.V01 = matrix.V01 + value;
@@ -591,7 +599,7 @@ namespace AForge.Math
         /// <returns>Returns new matrix with all components equal to corresponding components of the
         /// specified matrix increased by the specified value.</returns>
         /// 
-        public static Matrix3x3 Add( Matrix3x3 matrix, float value )
+        public static Matrix3x3 Add(Matrix3x3 matrix, float value)
         {
             return matrix + value;
         }
@@ -605,21 +613,19 @@ namespace AForge.Math
         /// 
         /// <returns>Returns <see langword="true"/> if the two matrices are equal or <see langword="false"/> otherwise.</returns>
         /// 
-        public static bool operator ==( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static bool operator ==(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
             return (
-                ( matrix1.V00 == matrix2.V00 ) &&
-                ( matrix1.V01 == matrix2.V01 ) &&
-                ( matrix1.V02 == matrix2.V02 ) &&
-
-                ( matrix1.V10 == matrix2.V10 ) &&
-                ( matrix1.V11 == matrix2.V11 ) &&
-                ( matrix1.V12 == matrix2.V12 ) &&
-
-                ( matrix1.V20 == matrix2.V20 ) &&
-                ( matrix1.V21 == matrix2.V21 ) &&
-                ( matrix1.V22 == matrix2.V22 )
-            );
+                (matrix1.V00 == matrix2.V00) &&
+                (matrix1.V01 == matrix2.V01) &&
+                (matrix1.V02 == matrix2.V02) &&
+                (matrix1.V10 == matrix2.V10) &&
+                (matrix1.V11 == matrix2.V11) &&
+                (matrix1.V12 == matrix2.V12) &&
+                (matrix1.V20 == matrix2.V20) &&
+                (matrix1.V21 == matrix2.V21) &&
+                (matrix1.V22 == matrix2.V22)
+                );
         }
 
         /// <summary>
@@ -631,21 +637,19 @@ namespace AForge.Math
         /// 
         /// <returns>Returns <see langword="true"/> if the two matrices are not equal or <see langword="false"/> otherwise.</returns>
         /// 
-        public static bool operator !=( Matrix3x3 matrix1, Matrix3x3 matrix2 )
+        public static bool operator !=(Matrix3x3 matrix1, Matrix3x3 matrix2)
         {
             return (
-                ( matrix1.V00 != matrix2.V00 ) ||
-                ( matrix1.V01 != matrix2.V01 ) ||
-                ( matrix1.V02 != matrix2.V02 ) ||
-
-                ( matrix1.V10 != matrix2.V10 ) ||
-                ( matrix1.V11 != matrix2.V11 ) ||
-                ( matrix1.V12 != matrix2.V12 ) ||
-
-                ( matrix1.V20 != matrix2.V20 ) ||
-                ( matrix1.V21 != matrix2.V21 ) ||
-                ( matrix1.V22 != matrix2.V22 )
-            );
+                (matrix1.V00 != matrix2.V00) ||
+                (matrix1.V01 != matrix2.V01) ||
+                (matrix1.V02 != matrix2.V02) ||
+                (matrix1.V10 != matrix2.V10) ||
+                (matrix1.V11 != matrix2.V11) ||
+                (matrix1.V12 != matrix2.V12) ||
+                (matrix1.V20 != matrix2.V20) ||
+                (matrix1.V21 != matrix2.V21) ||
+                (matrix1.V22 != matrix2.V22)
+                );
         }
 
         /// <summary>
@@ -656,9 +660,9 @@ namespace AForge.Math
         /// 
         /// <returns>Returns <see langword="true"/> if the two matrices are equal or <see langword="false"/> otherwise.</returns>
         /// 
-        public bool Equals( Matrix3x3 matrix )
+        public bool Equals(Matrix3x3 matrix)
         {
-            return ( this == matrix );
+            return (this == matrix);
         }
 
         /// <summary>
@@ -669,11 +673,11 @@ namespace AForge.Math
         /// 
         /// <returns>Returns <see langword="true"/> if the matrix equals to the specified object or <see langword="false"/> otherwise.</returns>
         /// 
-        public override bool Equals( Object obj )
+        public override bool Equals(Object obj)
         {
-            if ( obj is Matrix3x3 )
+            if (obj is Matrix3x3)
             {
-                return Equals( (Matrix3x3) obj );
+                return Equals((Matrix3x3) obj);
             }
             return false;
         }
@@ -684,12 +688,12 @@ namespace AForge.Math
         /// 
         /// <returns>A 32-bit signed integer hash code.</returns>
         /// 
-        public override int GetHashCode( )
+        public override int GetHashCode()
         {
             return
-                V00.GetHashCode( ) + V01.GetHashCode( ) + V02.GetHashCode( ) +
-                V10.GetHashCode( ) + V11.GetHashCode( ) + V12.GetHashCode( ) +
-                V20.GetHashCode( ) + V21.GetHashCode( ) + V22.GetHashCode( );
+                V00.GetHashCode() + V01.GetHashCode() + V02.GetHashCode() +
+                V10.GetHashCode() + V11.GetHashCode() + V12.GetHashCode() +
+                V20.GetHashCode() + V21.GetHashCode() + V22.GetHashCode();
         }
 
         /// <summary>
@@ -698,9 +702,9 @@ namespace AForge.Math
         /// 
         /// <returns>Return a matrix which equals to transposition of this matrix.</returns>
         /// 
-        public Matrix3x3 Transpose( )
+        public Matrix3x3 Transpose()
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
             m.V00 = V00;
             m.V01 = V10;
@@ -723,18 +727,18 @@ namespace AForge.Math
         /// 
         /// <returns>Returns a matrix which is the result of multiplying this matrix by its transposition.</returns>
         ///
-        public Matrix3x3 MultiplySelfByTranspose( )
+        public Matrix3x3 MultiplySelfByTranspose()
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            m.V00 = V00 * V00 + V01 * V01 + V02 * V02;
-            m.V10 = m.V01 = V00 * V10 + V01 * V11 + V02 * V12;
-            m.V20 = m.V02 = V00 * V20 + V01 * V21 + V02 * V22;
+            m.V00 = V00*V00 + V01*V01 + V02*V02;
+            m.V10 = m.V01 = V00*V10 + V01*V11 + V02*V12;
+            m.V20 = m.V02 = V00*V20 + V01*V21 + V02*V22;
 
-            m.V11 = V10 * V10 + V11 * V11 + V12 * V12;
-            m.V21 = m.V12 = V10 * V20 + V11 * V21 + V12 * V22;
+            m.V11 = V10*V10 + V11*V11 + V12*V12;
+            m.V21 = m.V12 = V10*V20 + V11*V21 + V12*V22;
 
-            m.V22 = V20 * V20 + V21 * V21 + V22 * V22;
+            m.V22 = V20*V20 + V21*V21 + V22*V22;
 
             return m;
         }
@@ -745,18 +749,18 @@ namespace AForge.Math
         /// 
         /// <returns>Returns a matrix which is the result of multiplying this matrix's transposition by itself.</returns>
         ///
-        public Matrix3x3 MultiplyTransposeBySelf( )
+        public Matrix3x3 MultiplyTransposeBySelf()
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            m.V00 = V00 * V00 + V10 * V10 + V20 * V20;
-            m.V10 = m.V01 = V00 * V01 + V10 * V11 + V20 * V21;
-            m.V20 = m.V02 = V00 * V02 + V10 * V12 + V20 * V22;
+            m.V00 = V00*V00 + V10*V10 + V20*V20;
+            m.V10 = m.V01 = V00*V01 + V10*V11 + V20*V21;
+            m.V20 = m.V02 = V00*V02 + V10*V12 + V20*V22;
 
-            m.V11 = V01 * V01 + V11 * V11 + V21 * V21;
-            m.V21 = m.V12 = V01 * V02 + V11 * V12 + V21 * V22;
+            m.V11 = V01*V01 + V11*V11 + V21*V21;
+            m.V21 = m.V12 = V01*V02 + V11*V12 + V21*V22;
 
-            m.V22 = V02 * V02 + V12 * V12 + V22 * V22;
+            m.V22 = V02*V02 + V12*V12 + V22*V22;
 
             return m;
         }
@@ -767,21 +771,21 @@ namespace AForge.Math
         /// 
         /// <returns>Returns adjugate of the matrix.</returns>
         /// 
-        public Matrix3x3 Adjugate( )
+        public Matrix3x3 Adjugate()
         {
-            Matrix3x3 m = new Matrix3x3( );
+            Matrix3x3 m = new Matrix3x3();
 
-            m.V00 = V11 * V22 - V12 * V21;
-            m.V01 = -( V01 * V22 - V02 * V21 );
-            m.V02 = V01 * V12 - V02 * V11;
+            m.V00 = V11*V22 - V12*V21;
+            m.V01 = -(V01*V22 - V02*V21);
+            m.V02 = V01*V12 - V02*V11;
 
-            m.V10 = -( V10 * V22 - V12 * V20 );
-            m.V11 = V00 * V22 - V02 * V20;
-            m.V12 = -( V00 * V12 - V02 * V10 );
+            m.V10 = -(V10*V22 - V12*V20);
+            m.V11 = V00*V22 - V02*V20;
+            m.V12 = -(V00*V12 - V02*V10);
 
-            m.V20 = V10 * V21 - V11 * V20;
-            m.V21 = -( V00 * V21 - V01 * V20 );
-            m.V22 = V00 * V11 - V01 * V10;
+            m.V20 = V10*V21 - V11*V20;
+            m.V21 = -(V00*V21 - V01*V20);
+            m.V22 = V00*V11 - V01*V10;
 
             return m;
         }
@@ -794,17 +798,17 @@ namespace AForge.Math
         /// 
         /// <exception cref="ArgumentException">Cannot calculate inverse of the matrix since it is singular.</exception>
         /// 
-        public Matrix3x3 Inverse( )
+        public Matrix3x3 Inverse()
         {
             float det = Determinant;
 
-            if ( det == 0 )
+            if (det == 0)
             {
-                throw new ArgumentException( "Cannot calculate inverse of the matrix since it is singular." );
+                throw new ArgumentException("Cannot calculate inverse of the matrix since it is singular.");
             }
 
-            float detInv = 1 / det;
-            Matrix3x3 m = Adjugate( );
+            float detInv = 1/det;
+            Matrix3x3 m = Adjugate();
 
             m.V00 *= detInv;
             m.V01 *= detInv;
@@ -830,14 +834,14 @@ namespace AForge.Math
         /// <remarks><para>The pseudo inverse of the matrix is calculate through its <see cref="SVD"/>
         /// as V*E<sup>+</sup>*U<sup>T</sup>.</para></remarks>
         /// 
-        public Matrix3x3 PseudoInverse( )
+        public Matrix3x3 PseudoInverse()
         {
             Matrix3x3 u, v;
             Vector3 e;
 
-            SVD( out u, out e, out v );
+            SVD(out u, out e, out v);
 
-            return v * CreateDiagonal( e.Inverse( ) ) * u.Transpose( );
+            return v*CreateDiagonal(e.Inverse())*u.Transpose();
         }
 
         /// <summary>
@@ -854,21 +858,21 @@ namespace AForge.Math
         /// </code>
         /// </para></remarks>
         /// 
-        public void SVD( out Matrix3x3 u, out Vector3 e, out Matrix3x3 v )
+        public void SVD(out Matrix3x3 u, out Vector3 e, out Matrix3x3 v)
         {
             double[,] uArray = new double[3, 3]
             {
-                { V00, V01, V02 },
-                { V10, V11, V12 },
-                { V20, V21, V22 }
+                {V00, V01, V02},
+                {V10, V11, V12},
+                {V20, V21, V22}
             };
             double[,] vArray;
             double[] eArray;
 
-            svd.svdcmp( uArray, out eArray, out vArray );
+            svd.svdcmp(uArray, out eArray, out vArray);
 
             // build U matrix
-            u = new Matrix3x3( );
+            u = new Matrix3x3();
             u.V00 = (float) uArray[0, 0];
             u.V01 = (float) uArray[0, 1];
             u.V02 = (float) uArray[0, 2];
@@ -880,7 +884,7 @@ namespace AForge.Math
             u.V22 = (float) uArray[2, 2];
 
             // build V matrix
-            v = new Matrix3x3( );
+            v = new Matrix3x3();
             v.V00 = (float) vArray[0, 0];
             v.V01 = (float) vArray[0, 1];
             v.V02 = (float) vArray[0, 2];
@@ -892,7 +896,7 @@ namespace AForge.Math
             v.V22 = (float) vArray[2, 2];
 
             // build E Vector3
-            e = new Vector3( );
+            e = new Vector3();
             e.X = (float) eArray[0];
             e.Y = (float) eArray[1];
             e.Z = (float) eArray[2];

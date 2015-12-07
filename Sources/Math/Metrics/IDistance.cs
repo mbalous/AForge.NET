@@ -36,6 +36,6 @@ namespace AForge.Math.Metrics
         /// 
         /// <returns>Returns distance measurement determined by the given algorithm.</returns>
         /// 
-        double GetDistance( double[] p, double[] q );
+        double GetDistance(double[] p, double[] q);
     }
 }

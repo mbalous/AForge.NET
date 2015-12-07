@@ -26,13 +26,13 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         /// <returns>Returns filter's pin.</returns>
         /// 
-        public static IPin GetPin( IBaseFilter filter, PinDirection dir, int num )
+        public static IPin GetPin(IBaseFilter filter, PinDirection dir, int num)
         {
             IPin[] pin = new IPin[1];
             IEnumPins pinsEnum = null;
 
             // enum filter pins
-            if ( filter.EnumPins( out pinsEnum ) == 0 )
+            if (filter.EnumPins(out pinsEnum) == 0)
             {
                 PinDirection pinDir;
                 int n;
@@ -40,25 +40,25 @@ namespace AForge.Video.DirectShow.Internals
                 try
                 {
                     // get next pin
-                    while ( pinsEnum.Next( 1, pin, out n ) == 0 )
+                    while (pinsEnum.Next(1, pin, out n) == 0)
                     {
                         // query pin`s direction
-                        pin[0].QueryDirection( out pinDir );
+                        pin[0].QueryDirection(out pinDir);
 
-                        if ( pinDir == dir )
+                        if (pinDir == dir)
                         {
-                            if ( num == 0 )
+                            if (num == 0)
                                 return pin[0];
                             num--;
                         }
 
-                        Marshal.ReleaseComObject( pin[0] );
+                        Marshal.ReleaseComObject(pin[0]);
                         pin[0] = null;
                     }
                 }
                 finally
                 {
-                    Marshal.ReleaseComObject( pinsEnum );
+                    Marshal.ReleaseComObject(pinsEnum);
                 }
             }
             return null;
@@ -73,9 +73,9 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         /// <returns>Returns filter's pin.</returns>
         /// 
-        public static IPin GetInPin( IBaseFilter filter, int num )
+        public static IPin GetInPin(IBaseFilter filter, int num)
         {
-            return GetPin( filter, PinDirection.Input, num );
+            return GetPin(filter, PinDirection.Input, num);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         /// <returns>Returns filter's pin.</returns>
         /// 
-        public static IPin GetOutPin( IBaseFilter filter, int num )
+        public static IPin GetOutPin(IBaseFilter filter, int num)
         {
-            return GetPin( filter, PinDirection.Output, num );
+            return GetPin(filter, PinDirection.Output, num);
         }
     }
 }

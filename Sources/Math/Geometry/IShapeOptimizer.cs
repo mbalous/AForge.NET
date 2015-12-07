@@ -39,6 +39,6 @@ namespace AForge.Math.Geometry
         /// 
         /// <returns>Returns final optimized shape, which may have reduced amount of points.</returns>
         /// 
-        List<IntPoint> OptimizeShape( List<IntPoint> shape );
+        List<IntPoint> OptimizeShape(List<IntPoint> shape);
     }
 }

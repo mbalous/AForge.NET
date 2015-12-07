@@ -46,8 +46,8 @@ namespace AForge.Math
             get { return sigma; }
             set
             {
-                sigma = Math.Max( 0.00000001, value );
-                sqrSigma = sigma * sigma;
+                sigma = Math.Max(0.00000001, value);
+                sqrSigma = sigma*sigma;
             }
         }
 
@@ -55,7 +55,9 @@ namespace AForge.Math
         /// Initializes a new instance of the <see cref="Gaussian"/> class.
         /// </summary>
         /// 
-        public Gaussian( ) { }
+        public Gaussian()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Gaussian"/> class.
@@ -63,7 +65,7 @@ namespace AForge.Math
         /// 
         /// <param name="sigma">Sigma value.</param>
         /// 
-        public Gaussian( double sigma )
+        public Gaussian(double sigma)
         {
             Sigma = sigma;
         }
@@ -83,9 +85,9 @@ namespace AForge.Math
         /// </code>
         /// </remarks>
         /// 
-        public double Function( double x )
+        public double Function(double x)
         {
-            return Math.Exp( x * x / ( -2 * sqrSigma ) ) / ( Math.Sqrt( 2 * Math.PI ) * sigma );
+            return Math.Exp(x*x/(-2*sqrSigma))/(Math.Sqrt(2*Math.PI)*sigma);
         }
 
         /// <summary>
@@ -104,9 +106,9 @@ namespace AForge.Math
         /// </code>
         /// </remarks>
         /// 
-        public double Function2D( double x, double y )
+        public double Function2D(double x, double y)
         {
-            return Math.Exp( ( x * x + y * y ) / ( -2 * sqrSigma ) ) / ( 2 * Math.PI * sqrSigma );
+            return Math.Exp((x*x + y*y)/(-2*sqrSigma))/(2*Math.PI*sqrSigma);
         }
 
         /// <summary>
@@ -124,23 +126,23 @@ namespace AForge.Math
         /// 
         /// <exception cref="ArgumentException">Wrong kernel size.</exception>
         /// 
-        public double[] Kernel( int size )
+        public double[] Kernel(int size)
         {
             // check for evem size and for out of range
-            if ( ( ( size % 2 ) == 0 ) || ( size < 3 ) || ( size > 101 ) )
+            if (((size%2) == 0) || (size < 3) || (size > 101))
             {
-                throw new ArgumentException( "Wrong kernal size." );
+                throw new ArgumentException("Wrong kernal size.");
             }
 
             // raduis
-            int r = size / 2;
+            int r = size/2;
             // kernel
             double[] kernel = new double[size];
 
             // compute kernel
-            for ( int x = -r, i = 0; i < size; x++, i++ )
+            for (int x = -r, i = 0; i < size; x++, i++)
             {
-                kernel[i] = Function( x );
+                kernel[i] = Function(x);
             }
 
             return kernel;
@@ -161,25 +163,25 @@ namespace AForge.Math
         /// 
         /// <exception cref="ArgumentException">Wrong kernel size.</exception>
         /// 
-        public double[,] Kernel2D( int size )
+        public double[,] Kernel2D(int size)
         {
             // check for evem size and for out of range
-            if ( ( ( size % 2 ) == 0 ) || ( size < 3 ) || ( size > 101 ) )
+            if (((size%2) == 0) || (size < 3) || (size > 101))
             {
-                throw new ArgumentException( "Wrong kernal size." );
+                throw new ArgumentException("Wrong kernal size.");
             }
 
             // raduis
-            int r = size / 2;
+            int r = size/2;
             // kernel
             double[,] kernel = new double[size, size];
 
             // compute kernel
-            for ( int y = -r, i = 0; i < size; y++, i++ )
+            for (int y = -r, i = 0; i < size; y++, i++)
             {
-                for ( int x = -r, j = 0; j < size; x++, j++ )
+                for (int x = -r, j = 0; j < size; x++, j++)
                 {
-                    kernel[i, j] = Function2D( x, y );
+                    kernel[i, j] = Function2D(x, y);
                 }
             }
 

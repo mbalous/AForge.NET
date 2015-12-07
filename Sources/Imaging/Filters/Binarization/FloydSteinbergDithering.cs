@@ -53,11 +53,12 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="FloydSteinbergDithering"/> class.
         /// </summary>
         /// 
-        public FloydSteinbergDithering( )
-            : base( new int[2][] {
-            new int[1] { 7 },
-            new int[3] { 3, 5, 1 }
-        } )
+        public FloydSteinbergDithering()
+            : base(new int[2][]
+            {
+                new int[1] {7},
+                new int[3] {3, 5, 1}
+            })
         {
         }
     }

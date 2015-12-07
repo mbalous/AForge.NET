@@ -46,7 +46,7 @@ namespace AForge.Imaging.Filters
     public class ThresholdedEuclideanDifference : BaseFilter2
     {
         // format translation dictionary
-        private Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>( );
+        private Dictionary<PixelFormat, PixelFormat> formatTranslations = new Dictionary<PixelFormat, PixelFormat>();
 
         private int threshold = 15;
 
@@ -96,14 +96,14 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="ThresholdedEuclideanDifference"/> class.
         /// </summary>
         /// 
-        public ThresholdedEuclideanDifference( )
+        public ThresholdedEuclideanDifference()
         {
             // initialize format translation dictionary
             formatTranslations[PixelFormat.Format8bppIndexed] = PixelFormat.Format8bppIndexed;
-            formatTranslations[PixelFormat.Format24bppRgb]    = PixelFormat.Format8bppIndexed;
-            formatTranslations[PixelFormat.Format32bppRgb]    = PixelFormat.Format8bppIndexed;
-            formatTranslations[PixelFormat.Format32bppArgb]   = PixelFormat.Format8bppIndexed;
-            formatTranslations[PixelFormat.Format32bppPArgb]  = PixelFormat.Format8bppIndexed;
+            formatTranslations[PixelFormat.Format24bppRgb] = PixelFormat.Format8bppIndexed;
+            formatTranslations[PixelFormat.Format32bppRgb] = PixelFormat.Format8bppIndexed;
+            formatTranslations[PixelFormat.Format32bppArgb] = PixelFormat.Format8bppIndexed;
+            formatTranslations[PixelFormat.Format32bppPArgb] = PixelFormat.Format8bppIndexed;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace AForge.Imaging.Filters
         /// 
         /// <param name="threshold">Difference threshold (see <see cref="Threshold"/>).</param>
         /// 
-        public ThresholdedEuclideanDifference( int threshold ) : this( )
+        public ThresholdedEuclideanDifference(int threshold) : this()
         {
             this.threshold = threshold;
         }
@@ -125,20 +125,21 @@ namespace AForge.Imaging.Filters
         /// <param name="overlay">Overlay image data.</param>
         /// <param name="destinationData">Destination image data</param>
         /// 
-        protected override unsafe void ProcessFilter( UnmanagedImage sourceData, UnmanagedImage overlay, UnmanagedImage destinationData )
+        protected override unsafe void ProcessFilter(UnmanagedImage sourceData, UnmanagedImage overlay,
+            UnmanagedImage destinationData)
         {
             whitePixelsCount = 0;
 
             // get source image size
-            int width  = sourceData.Width;
+            int width = sourceData.Width;
             int height = sourceData.Height;
-            int pixelSize = Bitmap.GetPixelFormatSize( sourceData.PixelFormat ) / 8;
+            int pixelSize = Bitmap.GetPixelFormatSize(sourceData.PixelFormat)/8;
 
-            byte* src = (byte*) sourceData.ImageData.ToPointer( );
-            byte* ovr = (byte*) overlay.ImageData.ToPointer( );
-            byte* dst = (byte*) destinationData.ImageData.ToPointer( );
+            byte* src = (byte*) sourceData.ImageData.ToPointer();
+            byte* ovr = (byte*) overlay.ImageData.ToPointer();
+            byte* dst = (byte*) destinationData.ImageData.ToPointer();
 
-            if ( pixelSize == 1 )
+            if (pixelSize == 1)
             {
                 // grayscale image
                 int srcOffset = sourceData.Stride - width;
@@ -146,17 +147,17 @@ namespace AForge.Imaging.Filters
                 int dstOffset = destinationData.Stride - width;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for (int y = 0; y < height; y++)
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src++, ovr++, dst++ )
+                    for (int x = 0; x < width; x++, src++, ovr++, dst++)
                     {
                         int diff = *src - *ovr;
 
-                        if ( diff < 0 )
+                        if (diff < 0)
                             diff = -diff;
 
-                        if ( diff > threshold )
+                        if (diff > threshold)
                         {
                             *dst = (byte) 255;
                             whitePixelsCount++;
@@ -174,23 +175,23 @@ namespace AForge.Imaging.Filters
             else
             {
                 // color image
-                int srcOffset = sourceData.Stride - pixelSize * width;
-                int ovrOffset = overlay.Stride - pixelSize * width;
+                int srcOffset = sourceData.Stride - pixelSize*width;
+                int ovrOffset = overlay.Stride - pixelSize*width;
                 int dstOffset = destinationData.Stride - width;
 
-                int squaredThreshold = threshold * threshold;
+                int squaredThreshold = threshold*threshold;
 
                 // for each line
-                for ( int y = 0; y < height; y++ )
+                for (int y = 0; y < height; y++)
                 {
                     // for each pixel
-                    for ( int x = 0; x < width; x++, src += pixelSize, ovr += pixelSize, dst++ )
+                    for (int x = 0; x < width; x++, src += pixelSize, ovr += pixelSize, dst++)
                     {
                         int diffR = src[RGB.R] - ovr[RGB.R];
                         int diffG = src[RGB.G] - ovr[RGB.G];
                         int diffB = src[RGB.B] - ovr[RGB.B];
 
-                        if ( diffR * diffR + diffG * diffG + diffB * diffB > squaredThreshold )
+                        if (diffR*diffR + diffG*diffG + diffB*diffB > squaredThreshold)
                         {
                             *dst = (byte) 255;
                             whitePixelsCount++;

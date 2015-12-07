@@ -79,7 +79,7 @@ namespace AForge.Imaging.ColorReduction
             set
             {
                 coefficients = value;
-                CalculateCoefficientsSum( );
+                CalculateCoefficientsSum();
             }
         }
 
@@ -90,10 +90,10 @@ namespace AForge.Imaging.ColorReduction
         /// <param name="coefficients">Diffusion coefficients (see <see cref="ColorErrorDiffusionToAdjacentNeighbors"/>
         /// for more information).</param>
         /// 
-        public ColorErrorDiffusionToAdjacentNeighbors( int[][] coefficients )
+        public ColorErrorDiffusionToAdjacentNeighbors(int[][] coefficients)
         {
             this.coefficients = coefficients;
-            CalculateCoefficientsSum( );
+            CalculateCoefficientsSum();
         }
 
         /// <summary>
@@ -108,37 +108,37 @@ namespace AForge.Imaging.ColorReduction
         /// <remarks>All parameters of the image and current processing pixel's coordinates
         /// are initialized by base class.</remarks>
         /// 
-        protected override unsafe void Diffuse( int rError, int gError, int bError, byte* ptr )
+        protected override unsafe void Diffuse(int rError, int gError, int bError, byte* ptr)
         {
-            int edR;	// error diffusion
-            int edG;	// error diffusion
-            int edB;	// error diffusion
+            int edR; // error diffusion
+            int edG; // error diffusion
+            int edB; // error diffusion
 
             // do error diffusion to right-standing neighbors
             int[] coefficientsRow = coefficients[0];
 
-            for ( int jI = 1, jP = pixelSize, jC = 0, k = coefficientsRow.Length; jC < k; jI++, jC++, jP += pixelSize )
+            for (int jI = 1, jP = pixelSize, jC = 0, k = coefficientsRow.Length; jC < k; jI++, jC++, jP += pixelSize)
             {
-                if ( x + jI >= width )
+                if (x + jI >= width)
                     break;
 
-                edR = ptr[jP + RGB.R] + ( rError * coefficientsRow[jC] ) / coefficientsSum;
-                edR = ( edR < 0 ) ? 0 : ( ( edR > 255 ) ? 255 : edR );
+                edR = ptr[jP + RGB.R] + (rError*coefficientsRow[jC])/coefficientsSum;
+                edR = (edR < 0) ? 0 : ((edR > 255) ? 255 : edR);
                 ptr[jP + RGB.R] = (byte) edR;
 
-                edG = ptr[jP + RGB.G] + ( gError * coefficientsRow[jC] ) / coefficientsSum;
-                edG = ( edG < 0 ) ? 0 : ( ( edG > 255 ) ? 255 : edG );
+                edG = ptr[jP + RGB.G] + (gError*coefficientsRow[jC])/coefficientsSum;
+                edG = (edG < 0) ? 0 : ((edG > 255) ? 255 : edG);
                 ptr[jP + RGB.G] = (byte) edG;
 
-                edB = ptr[jP + RGB.B] + ( bError * coefficientsRow[jC] ) / coefficientsSum;
-                edB = ( edB < 0 ) ? 0 : ( ( edB > 255 ) ? 255 : edB );
+                edB = ptr[jP + RGB.B] + (bError*coefficientsRow[jC])/coefficientsSum;
+                edB = (edB < 0) ? 0 : ((edB > 255) ? 255 : edB);
                 ptr[jP + RGB.B] = (byte) edB;
             }
 
             // do error diffusion to bottom neigbors
-            for ( int i = 1, n = coefficients.Length; i < n; i++ )
+            for (int i = 1, n = coefficients.Length; i < n; i++)
             {
-                if ( y + i >= height )
+                if (y + i >= height)
                     break;
 
                 // move pointer to next image line
@@ -148,25 +148,26 @@ namespace AForge.Imaging.ColorReduction
                 coefficientsRow = coefficients[i];
 
                 // process the row
-                for ( int jC = 0, k = coefficientsRow.Length, jI = -( k >> 1 ), jP = -( k >> 1 ) * pixelSize; jC < k; jI++, jC++, jP += pixelSize )
+                for (int jC = 0, k = coefficientsRow.Length, jI = -(k >> 1), jP = -(k >> 1)*pixelSize;
+                    jC < k;
+                    jI++, jC++, jP += pixelSize)
                 {
-                    if ( x + jI >= width )
+                    if (x + jI >= width)
                         break;
-                    if ( x + jI < 0 )
+                    if (x + jI < 0)
                         continue;
 
-                    edR = ptr[jP + RGB.R] + ( rError * coefficientsRow[jC] ) / coefficientsSum;
-                    edR = ( edR < 0 ) ? 0 : ( ( edR > 255 ) ? 255 : edR );
+                    edR = ptr[jP + RGB.R] + (rError*coefficientsRow[jC])/coefficientsSum;
+                    edR = (edR < 0) ? 0 : ((edR > 255) ? 255 : edR);
                     ptr[jP + RGB.R] = (byte) edR;
 
-                    edG = ptr[jP + RGB.G] + ( gError * coefficientsRow[jC] ) / coefficientsSum;
-                    edG = ( edG < 0 ) ? 0 : ( ( edG > 255 ) ? 255 : edG );
+                    edG = ptr[jP + RGB.G] + (gError*coefficientsRow[jC])/coefficientsSum;
+                    edG = (edG < 0) ? 0 : ((edG > 255) ? 255 : edG);
                     ptr[jP + RGB.G] = (byte) edG;
 
-                    edB = ptr[jP + RGB.B] + ( bError * coefficientsRow[jC] ) / coefficientsSum;
-                    edB = ( edB < 0 ) ? 0 : ( ( edB > 255 ) ? 255 : edB );
+                    edB = ptr[jP + RGB.B] + (bError*coefficientsRow[jC])/coefficientsSum;
+                    edB = (edB < 0) ? 0 : ((edB > 255) ? 255 : edB);
                     ptr[jP + RGB.B] = (byte) edB;
-
                 }
             }
         }
@@ -174,15 +175,15 @@ namespace AForge.Imaging.ColorReduction
         #region Private Members
 
         // Calculate coefficients' sum
-        private void CalculateCoefficientsSum( )
+        private void CalculateCoefficientsSum()
         {
             coefficientsSum = 0;
 
-            for ( int i = 0, n = coefficients.Length; i < n; i++ )
+            for (int i = 0, n = coefficients.Length; i < n; i++)
             {
                 int[] coefficientsRow = coefficients[i];
 
-                for ( int j = 0, k = coefficientsRow.Length; j < k; j++ )
+                for (int j = 0, k = coefficientsRow.Length; j < k; j++)
                 {
                     coefficientsSum += coefficientsRow[j];
                 }

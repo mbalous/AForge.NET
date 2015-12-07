@@ -33,7 +33,7 @@ namespace AForge.Imaging.Filters
         /// <summary>
         /// Fill color.
         /// </summary>
-        protected Color fillColor = Color.FromArgb( 0, 0, 0 );
+        protected Color fillColor = Color.FromArgb(0, 0, 0);
 
         /// <summary>
         /// Rotation angle, [0, 360].
@@ -41,7 +41,7 @@ namespace AForge.Imaging.Filters
         public double Angle
         {
             get { return angle; }
-            set { angle = value % 360; }
+            set { angle = value%360; }
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace AForge.Imaging.Filters
         /// <remarks><para>This constructor sets <see cref="KeepSize"/> property to <b>false</b>.
         /// </para></remarks>
         /// 
-        public BaseRotateFilter( double angle )
+        public BaseRotateFilter(double angle)
         {
             this.angle = angle;
         }
@@ -95,9 +95,9 @@ namespace AForge.Imaging.Filters
         /// <param name="angle">Rotation angle.</param>
         /// <param name="keepSize">Keep image size or not.</param>
         /// 
-        public BaseRotateFilter( double angle, bool keepSize )
+        public BaseRotateFilter(double angle, bool keepSize)
         {
-            this.angle    = angle;
+            this.angle = angle;
             this.keepSize = keepSize;
         }
 
@@ -109,39 +109,41 @@ namespace AForge.Imaging.Filters
         /// 
         /// <returns>New image size - size of the destination image.</returns>
         /// 
-        protected override System.Drawing.Size CalculateNewImageSize( UnmanagedImage sourceData )
+        protected override System.Drawing.Size CalculateNewImageSize(UnmanagedImage sourceData)
         {
             // return same size if original image size should be kept
-            if ( keepSize )
-                return new Size( sourceData.Width, sourceData.Height );
+            if (keepSize)
+                return new Size(sourceData.Width, sourceData.Height);
 
             // angle's sine and cosine
-            double angleRad = -angle * Math.PI / 180;
-            double angleCos = Math.Cos( angleRad );
-            double angleSin = Math.Sin( angleRad );
+            double angleRad = -angle*Math.PI/180;
+            double angleCos = Math.Cos(angleRad);
+            double angleSin = Math.Sin(angleRad);
 
             // calculate half size
-            double halfWidth  = (double) sourceData.Width / 2;
-            double halfHeight = (double) sourceData.Height / 2;
+            double halfWidth = (double) sourceData.Width/2;
+            double halfHeight = (double) sourceData.Height/2;
 
             // rotate corners
-            double cx1 = halfWidth * angleCos;
-            double cy1 = halfWidth * angleSin;
+            double cx1 = halfWidth*angleCos;
+            double cy1 = halfWidth*angleSin;
 
-            double cx2 = halfWidth * angleCos - halfHeight * angleSin;
-            double cy2 = halfWidth * angleSin + halfHeight * angleCos;
+            double cx2 = halfWidth*angleCos - halfHeight*angleSin;
+            double cy2 = halfWidth*angleSin + halfHeight*angleCos;
 
-            double cx3 = -halfHeight * angleSin;
-            double cy3 =  halfHeight * angleCos;
+            double cx3 = -halfHeight*angleSin;
+            double cy3 = halfHeight*angleCos;
 
             double cx4 = 0;
             double cy4 = 0;
 
             // recalculate image size
-            halfWidth  = Math.Max( Math.Max( cx1, cx2 ), Math.Max( cx3, cx4 ) ) - Math.Min( Math.Min( cx1, cx2 ), Math.Min( cx3, cx4 ) );
-            halfHeight = Math.Max( Math.Max( cy1, cy2 ), Math.Max( cy3, cy4 ) ) - Math.Min( Math.Min( cy1, cy2 ), Math.Min( cy3, cy4 ) );
+            halfWidth = Math.Max(Math.Max(cx1, cx2), Math.Max(cx3, cx4)) -
+                        Math.Min(Math.Min(cx1, cx2), Math.Min(cx3, cx4));
+            halfHeight = Math.Max(Math.Max(cy1, cy2), Math.Max(cy3, cy4)) -
+                         Math.Min(Math.Min(cy1, cy2), Math.Min(cy3, cy4));
 
-            return new Size( (int) ( halfWidth * 2 + 0.5 ), (int) ( halfHeight * 2 + 0.5 ) );
+            return new Size((int) (halfWidth*2 + 0.5), (int) (halfHeight*2 + 0.5));
         }
     }
 }

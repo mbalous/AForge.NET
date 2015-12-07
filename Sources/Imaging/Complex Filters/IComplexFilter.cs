@@ -29,6 +29,6 @@ namespace AForge.Imaging.ComplexFilters
         /// 
         /// <param name="complexImage">Complex image to apply filter to.</param>
         /// 
-        void Apply( ComplexImage complexImage );
+        void Apply(ComplexImage complexImage);
     }
 }

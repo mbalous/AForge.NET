@@ -7,6 +7,7 @@
 // Original idea from CxImage
 // http://www.codeproject.com/bitmap/cximage.asp
 //
+
 namespace AForge.Imaging.Filters
 {
     using System;
@@ -55,11 +56,12 @@ namespace AForge.Imaging.Filters
         /// Initializes a new instance of the <see cref="SierraDithering"/> class.
         /// </summary>
         /// 
-        public SierraDithering( ) : base( new int[3][] {
-            new int[2] { 5, 3 },
-            new int[5] { 2, 4, 5, 4, 2 },
-            new int[3] { 2, 3, 2 }
-        } )
+        public SierraDithering() : base(new int[3][]
+        {
+            new int[2] {5, 3},
+            new int[5] {2, 4, 5, 4, 2},
+            new int[3] {2, 3, 2}
+        })
         {
         }
     }

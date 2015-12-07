@@ -38,7 +38,7 @@ namespace AForge.Math.Random
         /// 
         /// <returns>Returns next random number.</returns>
         /// 
-        float Next( );
+        float Next();
 
         /// <summary>
         /// Set seed of the random numbers generator.
@@ -46,6 +46,6 @@ namespace AForge.Math.Random
         /// 
         /// <param name="seed">Seed value.</param>
         /// 
-        void SetSeed( int seed );
+        void SetSeed(int seed);
     }
 }

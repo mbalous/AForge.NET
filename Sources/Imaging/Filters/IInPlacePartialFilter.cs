@@ -40,7 +40,7 @@ namespace AForge.Imaging.Filters
         /// 
         /// <remarks>The method applies filter directly to the provided image data.</remarks>
         /// 
-        void ApplyInPlace( Bitmap image, Rectangle rect );
+        void ApplyInPlace(Bitmap image, Rectangle rect);
 
         /// <summary>
         /// Apply filter to an image or its part.
@@ -51,7 +51,7 @@ namespace AForge.Imaging.Filters
         /// 
         /// <remarks>The method applies filter directly to the provided image data.</remarks>
         /// 
-        void ApplyInPlace( BitmapData imageData, Rectangle rect );
+        void ApplyInPlace(BitmapData imageData, Rectangle rect);
 
         /// <summary>
         /// Apply filter to an image in unmanaged memory.
@@ -62,6 +62,6 @@ namespace AForge.Imaging.Filters
         /// 
         /// <remarks>The method applies filter directly to the provided image.</remarks>
         /// 
-        void ApplyInPlace( UnmanagedImage image, Rectangle rect );
+        void ApplyInPlace(UnmanagedImage image, Rectangle rect);
     }
 }
