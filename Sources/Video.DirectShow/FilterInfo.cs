@@ -10,7 +10,7 @@ namespace AForge.Video.DirectShow
     using System;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-    using AForge.Video.DirectShow.Internals;
+    using Internals;
 
     /// <summary>
     /// DirectShow filter information.
@@ -37,8 +37,8 @@ namespace AForge.Video.DirectShow
         /// 
         public FilterInfo(string monikerString)
         {
-            MonikerString = monikerString;
-            Name = GetName(monikerString);
+            this.MonikerString = monikerString;
+            this.Name = GetName(monikerString);
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace AForge.Video.DirectShow
         /// 
         internal FilterInfo(IMoniker moniker)
         {
-            MonikerString = GetMonikerString(moniker);
-            Name = GetName(moniker);
+            this.MonikerString = GetMonikerString(moniker);
+            this.Name = GetName(moniker);
         }
 
         /// <summary>

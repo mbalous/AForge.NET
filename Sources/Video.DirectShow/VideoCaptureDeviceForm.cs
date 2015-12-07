@@ -70,12 +70,12 @@ namespace AForge.Video.DirectShow
         /// 
         public bool ConfigureSnapshots
         {
-            get { return configureSnapshots; }
+            get { return this.configureSnapshots; }
             set
             {
-                configureSnapshots = value;
-                snapshotsLabel.Visible = value;
-                snapshotResolutionsCombo.Visible = value;
+                this.configureSnapshots = value;
+                this.snapshotsLabel.Visible = value;
+                this.snapshotResolutionsCombo.Visible = value;
             }
         }
 
@@ -89,7 +89,7 @@ namespace AForge.Video.DirectShow
         /// 
         public VideoCaptureDevice VideoDevice
         {
-            get { return videoDevice; }
+            get { return this.videoDevice; }
         }
 
         private string videoDeviceMoniker = string.Empty;
@@ -107,8 +107,8 @@ namespace AForge.Video.DirectShow
         /// 
         public string VideoDeviceMoniker
         {
-            get { return videoDeviceMoniker; }
-            set { videoDeviceMoniker = value; }
+            get { return this.videoDeviceMoniker; }
+            set { this.videoDeviceMoniker = value; }
         }
 
         /// <summary>
@@ -121,8 +121,8 @@ namespace AForge.Video.DirectShow
         /// 
         public Size CaptureSize
         {
-            get { return captureSize; }
-            set { captureSize = value; }
+            get { return this.captureSize; }
+            set { this.captureSize = value; }
         }
 
         /// <summary>
@@ -135,8 +135,8 @@ namespace AForge.Video.DirectShow
         /// </remarks>
         public Size SnapshotSize
         {
-            get { return snapshotSize; }
-            set { snapshotSize = value; }
+            get { return this.snapshotSize; }
+            set { this.snapshotSize = value; }
         }
 
         /// <summary>
@@ -148,8 +148,8 @@ namespace AForge.Video.DirectShow
         /// 
         public VideoInput VideoInput
         {
-            get { return videoInput; }
-            set { videoInput = value; }
+            get { return this.videoInput; }
+            set { this.videoInput = value; }
         }
 
         /// <summary>
@@ -159,28 +159,28 @@ namespace AForge.Video.DirectShow
         public VideoCaptureDeviceForm()
         {
             InitializeComponent();
-            ConfigureSnapshots = false;
+            this.ConfigureSnapshots = false;
 
             // show device list
             try
             {
                 // enumerate video devices
-                videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+                this.videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
-                if (videoDevices.Count == 0)
+                if (this.videoDevices.Count == 0)
                     throw new ApplicationException();
 
                 // add all devices to combo
-                foreach (FilterInfo device in videoDevices)
+                foreach (FilterInfo device in this.videoDevices)
                 {
-                    devicesCombo.Items.Add(device.Name);
+                    this.devicesCombo.Items.Add(device.Name);
                 }
             }
             catch (ApplicationException)
             {
-                devicesCombo.Items.Add("No local capture devices");
-                devicesCombo.Enabled = false;
-                okButton.Enabled = false;
+                this.devicesCombo.Items.Add("No local capture devices");
+                this.devicesCombo.Enabled = false;
+                this.okButton.Enabled = false;
             }
         }
 
@@ -189,61 +189,60 @@ namespace AForge.Video.DirectShow
         {
             int selectedCameraIndex = 0;
 
-            for (int i = 0; i < videoDevices.Count; i++)
+            for (int i = 0; i < this.videoDevices.Count; i++)
             {
-                if (videoDeviceMoniker == videoDevices[i].MonikerString)
+                if (this.videoDeviceMoniker == this.videoDevices[i].MonikerString)
                 {
                     selectedCameraIndex = i;
                     break;
                 }
             }
 
-            devicesCombo.SelectedIndex = selectedCameraIndex;
+            this.devicesCombo.SelectedIndex = selectedCameraIndex;
         }
 
         // Ok button clicked
         private void okButton_Click(object sender, EventArgs e)
         {
-            videoDeviceMoniker = videoDevice.Source;
+            this.videoDeviceMoniker = this.videoDevice.Source;
 
             // set video size
-            if (videoCapabilitiesDictionary.Count != 0)
+            if (this.videoCapabilitiesDictionary.Count != 0)
             {
-                VideoCapabilities caps = videoCapabilitiesDictionary[(string) videoResolutionsCombo.SelectedItem];
+                VideoCapabilities caps = this.videoCapabilitiesDictionary[(string) this.videoResolutionsCombo.SelectedItem];
 
-                videoDevice.VideoResolution = caps;
-                captureSize = caps.FrameSize;
+                this.videoDevice.VideoResolution = caps;
+                this.captureSize = caps.FrameSize;
             }
 
-            if (configureSnapshots)
+            if (this.configureSnapshots)
             {
                 // set snapshots size
-                if (snapshotCapabilitiesDictionary.Count != 0)
+                if (this.snapshotCapabilitiesDictionary.Count != 0)
                 {
-                    VideoCapabilities caps =
-                        snapshotCapabilitiesDictionary[(string) snapshotResolutionsCombo.SelectedItem];
+                    VideoCapabilities caps = this.snapshotCapabilitiesDictionary[(string) this.snapshotResolutionsCombo.SelectedItem];
 
-                    videoDevice.ProvideSnapshots = true;
-                    videoDevice.SnapshotResolution = caps;
+                    this.videoDevice.ProvideSnapshots = true;
+                    this.videoDevice.SnapshotResolution = caps;
 
-                    snapshotSize = caps.FrameSize;
+                    this.snapshotSize = caps.FrameSize;
                 }
             }
 
-            if (availableVideoInputs.Length != 0)
+            if (this.availableVideoInputs.Length != 0)
             {
-                videoInput = availableVideoInputs[videoInputsCombo.SelectedIndex];
-                videoDevice.CrossbarVideoInput = videoInput;
+                this.videoInput = this.availableVideoInputs[this.videoInputsCombo.SelectedIndex];
+                this.videoDevice.CrossbarVideoInput = this.videoInput;
             }
         }
 
         // New video device is selected
         private void devicesCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (videoDevices.Count != 0)
+            if (this.videoDevices.Count != 0)
             {
-                videoDevice = new VideoCaptureDevice(videoDevices[devicesCombo.SelectedIndex].MonikerString);
-                EnumeratedSupportedFrameSizes(videoDevice);
+                this.videoDevice = new VideoCaptureDevice(this.videoDevices[this.devicesCombo.SelectedIndex].MonikerString);
+                EnumeratedSupportedFrameSizes(this.videoDevice);
             }
         }
 
@@ -252,12 +251,12 @@ namespace AForge.Video.DirectShow
         {
             this.Cursor = Cursors.WaitCursor;
 
-            videoResolutionsCombo.Items.Clear();
-            snapshotResolutionsCombo.Items.Clear();
-            videoInputsCombo.Items.Clear();
+            this.videoResolutionsCombo.Items.Clear();
+            this.snapshotResolutionsCombo.Items.Clear();
+            this.videoInputsCombo.Items.Clear();
 
-            videoCapabilitiesDictionary.Clear();
-            snapshotCapabilitiesDictionary.Clear();
+            this.videoCapabilitiesDictionary.Clear();
+            this.snapshotCapabilitiesDictionary.Clear();
 
             try
             {
@@ -270,31 +269,31 @@ namespace AForge.Video.DirectShow
                     string item = string.Format(
                         "{0} x {1}", capabilty.FrameSize.Width, capabilty.FrameSize.Height);
 
-                    if (!videoResolutionsCombo.Items.Contains(item))
+                    if (!this.videoResolutionsCombo.Items.Contains(item))
                     {
-                        if (captureSize == capabilty.FrameSize)
+                        if (this.captureSize == capabilty.FrameSize)
                         {
-                            videoResolutionIndex = videoResolutionsCombo.Items.Count;
+                            videoResolutionIndex = this.videoResolutionsCombo.Items.Count;
                         }
 
-                        videoResolutionsCombo.Items.Add(item);
+                        this.videoResolutionsCombo.Items.Add(item);
                     }
 
-                    if (!videoCapabilitiesDictionary.ContainsKey(item))
+                    if (!this.videoCapabilitiesDictionary.ContainsKey(item))
                     {
-                        videoCapabilitiesDictionary.Add(item, capabilty);
+                        this.videoCapabilitiesDictionary.Add(item, capabilty);
                     }
                 }
 
                 if (videoCapabilities.Length == 0)
                 {
-                    videoResolutionsCombo.Items.Add("Not supported");
+                    this.videoResolutionsCombo.Items.Add("Not supported");
                 }
 
-                videoResolutionsCombo.SelectedIndex = videoResolutionIndex;
+                this.videoResolutionsCombo.SelectedIndex = videoResolutionIndex;
 
 
-                if (configureSnapshots)
+                if (this.configureSnapshots)
                 {
                     // collect snapshot capabilities
                     VideoCapabilities[] snapshotCapabilities = videoDevice.SnapshotCapabilities;
@@ -305,48 +304,48 @@ namespace AForge.Video.DirectShow
                         string item = string.Format(
                             "{0} x {1}", capabilty.FrameSize.Width, capabilty.FrameSize.Height);
 
-                        if (!snapshotResolutionsCombo.Items.Contains(item))
+                        if (!this.snapshotResolutionsCombo.Items.Contains(item))
                         {
-                            if (snapshotSize == capabilty.FrameSize)
+                            if (this.snapshotSize == capabilty.FrameSize)
                             {
-                                snapshotResolutionIndex = snapshotResolutionsCombo.Items.Count;
+                                snapshotResolutionIndex = this.snapshotResolutionsCombo.Items.Count;
                             }
 
-                            snapshotResolutionsCombo.Items.Add(item);
-                            snapshotCapabilitiesDictionary.Add(item, capabilty);
+                            this.snapshotResolutionsCombo.Items.Add(item);
+                            this.snapshotCapabilitiesDictionary.Add(item, capabilty);
                         }
                     }
 
                     if (snapshotCapabilities.Length == 0)
                     {
-                        snapshotResolutionsCombo.Items.Add("Not supported");
+                        this.snapshotResolutionsCombo.Items.Add("Not supported");
                     }
 
-                    snapshotResolutionsCombo.SelectedIndex = snapshotResolutionIndex;
+                    this.snapshotResolutionsCombo.SelectedIndex = snapshotResolutionIndex;
                 }
 
                 // get video inputs
-                availableVideoInputs = videoDevice.AvailableCrossbarVideoInputs;
+                this.availableVideoInputs = videoDevice.AvailableCrossbarVideoInputs;
                 int videoInputIndex = 0;
 
-                foreach (VideoInput input in availableVideoInputs)
+                foreach (VideoInput input in this.availableVideoInputs)
                 {
                     string item = string.Format("{0}: {1}", input.Index, input.Type);
 
-                    if ((input.Index == videoInput.Index) && (input.Type == videoInput.Type))
+                    if ((input.Index == this.videoInput.Index) && (input.Type == this.videoInput.Type))
                     {
-                        videoInputIndex = videoInputsCombo.Items.Count;
+                        videoInputIndex = this.videoInputsCombo.Items.Count;
                     }
 
-                    videoInputsCombo.Items.Add(item);
+                    this.videoInputsCombo.Items.Add(item);
                 }
 
-                if (availableVideoInputs.Length == 0)
+                if (this.availableVideoInputs.Length == 0)
                 {
-                    videoInputsCombo.Items.Add("Not supported");
+                    this.videoInputsCombo.Items.Add("Not supported");
                 }
 
-                videoInputsCombo.SelectedIndex = videoInputIndex;
+                this.videoInputsCombo.SelectedIndex = videoInputIndex;
             }
             finally
             {

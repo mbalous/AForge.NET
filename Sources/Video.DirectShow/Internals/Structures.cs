@@ -115,16 +115,16 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         protected virtual void Dispose(bool disposing)
         {
-            if ((FormatSize != 0) && (FormatPtr != IntPtr.Zero))
+            if ((this.FormatSize != 0) && (this.FormatPtr != IntPtr.Zero))
             {
-                Marshal.FreeCoTaskMem(FormatPtr);
-                FormatSize = 0;
+                Marshal.FreeCoTaskMem(this.FormatPtr);
+                this.FormatSize = 0;
             }
 
-            if (unkPtr != IntPtr.Zero)
+            if (this.unkPtr != IntPtr.Zero)
             {
-                Marshal.Release(unkPtr);
-                unkPtr = IntPtr.Zero;
+                Marshal.Release(this.unkPtr);
+                this.unkPtr = IntPtr.Zero;
             }
         }
     }
@@ -407,11 +407,11 @@ namespace AForge.Video.DirectShow.Internals
         /// 
         public Guid[] ToGuidArray()
         {
-            Guid[] retval = new Guid[cElems];
+            Guid[] retval = new Guid[this.cElems];
 
-            for (int i = 0; i < cElems; i++)
+            for (int i = 0; i < this.cElems; i++)
             {
-                IntPtr ptr = new IntPtr(pElems.ToInt64() + i*Marshal.SizeOf(typeof (Guid)));
+                IntPtr ptr = new IntPtr(this.pElems.ToInt64() + i*Marshal.SizeOf(typeof (Guid)));
                 retval[i] = (Guid) Marshal.PtrToStructure(ptr, typeof (Guid));
             }
 

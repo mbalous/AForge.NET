@@ -12,8 +12,8 @@ namespace AForge.Video.DirectShow
     using System.Collections.Generic;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using AForge.Video;
-    using AForge.Video.DirectShow.Internals;
+    using Video;
+    using Internals;
 
     /// <summary>
     /// Capabilities of video device such as frame size and frame rate.
@@ -36,7 +36,7 @@ namespace AForge.Video.DirectShow
         [Obsolete("No longer supported. Use AverageFrameRate instead.")]
         public int FrameRate
         {
-            get { return AverageFrameRate; }
+            get { return this.AverageFrameRate; }
         }
 
         /// <summary>
@@ -132,20 +132,20 @@ namespace AForge.Video.DirectShow
                     VideoInfoHeader videoInfo =
                         (VideoInfoHeader) Marshal.PtrToStructure(mediaType.FormatPtr, typeof (VideoInfoHeader));
 
-                    FrameSize = new Size(videoInfo.BmiHeader.Width, videoInfo.BmiHeader.Height);
-                    BitCount = videoInfo.BmiHeader.BitCount;
-                    AverageFrameRate = (int) (10000000/videoInfo.AverageTimePerFrame);
-                    MaximumFrameRate = (int) (10000000/caps.MinFrameInterval);
+                    this.FrameSize = new Size(videoInfo.BmiHeader.Width, videoInfo.BmiHeader.Height);
+                    this.BitCount = videoInfo.BmiHeader.BitCount;
+                    this.AverageFrameRate = (int) (10000000/videoInfo.AverageTimePerFrame);
+                    this.MaximumFrameRate = (int) (10000000/caps.MinFrameInterval);
                 }
                 else if (mediaType.FormatType == FormatType.VideoInfo2)
                 {
                     VideoInfoHeader2 videoInfo =
                         (VideoInfoHeader2) Marshal.PtrToStructure(mediaType.FormatPtr, typeof (VideoInfoHeader2));
 
-                    FrameSize = new Size(videoInfo.BmiHeader.Width, videoInfo.BmiHeader.Height);
-                    BitCount = videoInfo.BmiHeader.BitCount;
-                    AverageFrameRate = (int) (10000000/videoInfo.AverageTimePerFrame);
-                    MaximumFrameRate = (int) (10000000/caps.MinFrameInterval);
+                    this.FrameSize = new Size(videoInfo.BmiHeader.Width, videoInfo.BmiHeader.Height);
+                    this.BitCount = videoInfo.BmiHeader.BitCount;
+                    this.AverageFrameRate = (int) (10000000/videoInfo.AverageTimePerFrame);
+                    this.MaximumFrameRate = (int) (10000000/caps.MinFrameInterval);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace AForge.Video.DirectShow
                 // ignore 12 bpp formats for now, since it was noticed they cause issues on Windows 8
                 // TODO: proper fix needs to be done so ICaptureGraphBuilder2::RenderStream() does not fail
                 // on such formats
-                if (BitCount <= 12)
+                if (this.BitCount <= 12)
                 {
                     throw new ApplicationException("Unsupported format found.");
                 }
@@ -195,7 +195,7 @@ namespace AForge.Video.DirectShow
                 return false;
             }
 
-            return ((FrameSize == vc2.FrameSize) && (BitCount == vc2.BitCount));
+            return ((this.FrameSize == vc2.FrameSize) && (this.BitCount == vc2.BitCount));
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace AForge.Video.DirectShow
         /// <returns>Returns hash code ot the object </returns>
         public override int GetHashCode()
         {
-            return FrameSize.GetHashCode() ^ BitCount;
+            return this.FrameSize.GetHashCode() ^ this.BitCount;
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace AForge.Video.DirectShow
         public static bool operator ==(VideoCapabilities a, VideoCapabilities b)
         {
             // if both are null, or both are same instance, return true.
-            if (object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }

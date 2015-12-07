@@ -13,7 +13,7 @@ namespace AForge.Video.DirectShow
     using System.Collections;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-    using AForge.Video.DirectShow.Internals;
+    using Internals;
 
     /// <summary>
     /// Collection of filters' information objects.
@@ -60,7 +60,7 @@ namespace AForge.Video.DirectShow
         /// 
         public FilterInfo this[int index]
         {
-            get { return (FilterInfo) InnerList[index]; }
+            get { return (FilterInfo) this.InnerList[index]; }
         }
 
         // Collect filters of specified category
@@ -99,7 +99,7 @@ namespace AForge.Video.DirectShow
 
                     // Add the filter
                     FilterInfo filter = new FilterInfo(devMon[0]);
-                    InnerList.Add(filter);
+                    this.InnerList.Add(filter);
 
                     // Release COM object
                     Marshal.ReleaseComObject(devMon[0]);
@@ -107,7 +107,7 @@ namespace AForge.Video.DirectShow
                 }
 
                 // Sort the collection
-                InnerList.Sort();
+                this.InnerList.Sort();
             }
             catch (Exception)
             {

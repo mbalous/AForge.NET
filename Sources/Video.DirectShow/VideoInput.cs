@@ -32,8 +32,8 @@ namespace AForge.Video.DirectShow
 
         internal VideoInput(int index, PhysicalConnectorType type)
         {
-            Index = index;
-            Type = type;
+            this.Index = index;
+            this.Type = type;
         }
 
         /// <summary>

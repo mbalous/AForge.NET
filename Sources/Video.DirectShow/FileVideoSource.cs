@@ -13,8 +13,8 @@ namespace AForge.Video.DirectShow
     using System.Drawing.Imaging;
     using System.Threading;
     using System.Runtime.InteropServices;
-    using AForge.Video;
-    using AForge.Video.DirectShow.Internals;
+    using Video;
+    using Internals;
 
     /// <summary>
     /// Video source for video files.
@@ -101,8 +101,8 @@ namespace AForge.Video.DirectShow
         /// 
         public virtual string Source
         {
-            get { return fileName; }
-            set { fileName = value; }
+            get { return this.fileName; }
+            set { this.fileName = value; }
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                int frames = framesReceived;
-                framesReceived = 0;
+                int frames = this.framesReceived;
+                this.framesReceived = 0;
                 return frames;
             }
         }
@@ -135,8 +135,8 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                long bytes = bytesReceived;
-                bytesReceived = 0;
+                long bytes = this.bytesReceived;
+                this.bytesReceived = 0;
                 return bytes;
             }
         }
@@ -151,10 +151,10 @@ namespace AForge.Video.DirectShow
         {
             get
             {
-                if (thread != null)
+                if (this.thread != null)
                 {
                     // check thread status
-                    if (thread.Join(0) == false)
+                    if (this.thread.Join(0) == false)
                         return true;
 
                     // the thread is not running, free resources
@@ -189,8 +189,8 @@ namespace AForge.Video.DirectShow
         /// 
         public bool PreventFreezing
         {
-            get { return preventFreezing; }
-            set { preventFreezing = value; }
+            get { return this.preventFreezing; }
+            set { this.preventFreezing = value; }
         }
 
         /// <summary>
@@ -209,8 +209,8 @@ namespace AForge.Video.DirectShow
         /// 
         public bool ReferenceClockEnabled
         {
-            get { return referenceClockEnabled; }
-            set { referenceClockEnabled = value; }
+            get { return this.referenceClockEnabled; }
+            set { this.referenceClockEnabled = value; }
         }
 
         /// <summary>
@@ -242,22 +242,22 @@ namespace AForge.Video.DirectShow
         /// 
         public void Start()
         {
-            if (!IsRunning)
+            if (!this.IsRunning)
             {
                 // check source
-                if ((fileName == null) || (fileName == string.Empty))
+                if ((this.fileName == null) || (this.fileName == string.Empty))
                     throw new ArgumentException("Video source is not specified");
 
-                framesReceived = 0;
-                bytesReceived = 0;
+                this.framesReceived = 0;
+                this.bytesReceived = 0;
 
                 // create events
-                stopEvent = new ManualResetEvent(false);
+                this.stopEvent = new ManualResetEvent(false);
 
                 // create and start new thread
-                thread = new Thread(new ThreadStart(WorkerThread));
-                thread.Name = fileName; // mainly for debugging
-                thread.Start();
+                this.thread = new Thread(new ThreadStart(WorkerThread));
+                this.thread.Name = this.fileName; // mainly for debugging
+                this.thread.Start();
             }
         }
 
@@ -271,10 +271,10 @@ namespace AForge.Video.DirectShow
         public void SignalToStop()
         {
             // stop thread
-            if (thread != null)
+            if (this.thread != null)
             {
                 // signal to stop
-                stopEvent.Set();
+                this.stopEvent.Set();
             }
         }
 
@@ -287,10 +287,10 @@ namespace AForge.Video.DirectShow
         /// 
         public void WaitForStop()
         {
-            if (thread != null)
+            if (this.thread != null)
             {
                 // wait for thread stop
-                thread.Join();
+                this.thread.Join();
 
                 Free();
             }
@@ -312,7 +312,7 @@ namespace AForge.Video.DirectShow
         {
             if (this.IsRunning)
             {
-                thread.Abort();
+                this.thread.Abort();
                 WaitForStop();
             }
         }
@@ -323,11 +323,11 @@ namespace AForge.Video.DirectShow
         /// 
         private void Free()
         {
-            thread = null;
+            this.thread = null;
 
             // release events
-            stopEvent.Close();
-            stopEvent = null;
+            this.stopEvent.Close();
+            this.stopEvent = null;
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace AForge.Video.DirectShow
                 graph = (IGraphBuilder) graphObject;
 
                 // create source device's object
-                graph.AddSourceFilter(fileName, "source", out sourceBase);
+                graph.AddSourceFilter(this.fileName, "source", out sourceBase);
                 if (sourceBase == null)
                     throw new ApplicationException("Failed creating source filter");
 
@@ -433,7 +433,7 @@ namespace AForge.Video.DirectShow
                 }
 
                 // let's do rendering, if we don't need to prevent freezing
-                if (!preventFreezing)
+                if (!this.preventFreezing)
                 {
                     // render pin
                     graph.Render(Tools.GetOutPin(grabberBase, 0));
@@ -450,7 +450,7 @@ namespace AForge.Video.DirectShow
                 sampleGrabber.SetCallback(grabber, 1);
 
                 // disable clock, if someone requested it
-                if (!referenceClockEnabled)
+                if (!this.referenceClockEnabled)
                 {
                     IMediaFilter mediaFilter = (IMediaFilter) graphObject;
                     mediaFilter.SetSyncSource(null);
@@ -482,16 +482,16 @@ namespace AForge.Video.DirectShow
                             }
                         }
                     }
-                } while (!stopEvent.WaitOne(100, false));
+                } while (!this.stopEvent.WaitOne(100, false));
 
                 mediaControl.Stop();
             }
             catch (Exception exception)
             {
                 // provide information to clients
-                if (VideoSourceError != null)
+                if (this.VideoSourceError != null)
                 {
-                    VideoSourceError(this, new VideoSourceErrorEventArgs(exception.Message));
+                    this.VideoSourceError(this, new VideoSourceErrorEventArgs(exception.Message));
                 }
             }
             finally
@@ -520,9 +520,9 @@ namespace AForge.Video.DirectShow
                 }
             }
 
-            if (PlayingFinished != null)
+            if (this.PlayingFinished != null)
             {
-                PlayingFinished(this, reasonToStop);
+                this.PlayingFinished(this, reasonToStop);
             }
         }
 
@@ -534,11 +534,11 @@ namespace AForge.Video.DirectShow
         /// 
         protected void OnNewFrame(Bitmap image)
         {
-            framesReceived++;
-            bytesReceived += image.Width*image.Height*(Bitmap.GetPixelFormatSize(image.PixelFormat) >> 3);
+            this.framesReceived++;
+            this.bytesReceived += image.Width*image.Height*(Image.GetPixelFormatSize(image.PixelFormat) >> 3);
 
-            if ((!stopEvent.WaitOne(0, false)) && (NewFrame != null))
-                NewFrame(this, new NewFrameEventArgs(image));
+            if ((!this.stopEvent.WaitOne(0, false)) && (this.NewFrame != null))
+                this.NewFrame(this, new NewFrameEventArgs(image));
         }
 
         //
@@ -552,15 +552,15 @@ namespace AForge.Video.DirectShow
             // Width property
             public int Width
             {
-                get { return width; }
-                set { width = value; }
+                get { return this.width; }
+                set { this.width = value; }
             }
 
             // Height property
             public int Height
             {
-                get { return height; }
-                set { height = value; }
+                get { return this.height; }
+                set { this.height = value; }
             }
 
             // Constructor
@@ -578,14 +578,14 @@ namespace AForge.Video.DirectShow
             // Callback method that receives a pointer to the sample buffer
             public int BufferCB(double sampleTime, IntPtr buffer, int bufferLen)
             {
-                if (parent.NewFrame != null)
+                if (this.parent.NewFrame != null)
                 {
                     // create new image
-                    System.Drawing.Bitmap image = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+                    Bitmap image = new Bitmap(this.width, this.height, PixelFormat.Format24bppRgb);
 
                     // lock bitmap data
                     BitmapData imageData = image.LockBits(
-                        new Rectangle(0, 0, width, height),
+                        new Rectangle(0, 0, this.width, this.height),
                         ImageLockMode.ReadWrite,
                         PixelFormat.Format24bppRgb);
 
@@ -595,10 +595,10 @@ namespace AForge.Video.DirectShow
 
                     unsafe
                     {
-                        byte* dst = (byte*) imageData.Scan0.ToPointer() + dstStride*(height - 1);
+                        byte* dst = (byte*) imageData.Scan0.ToPointer() + dstStride*(this.height - 1);
                         byte* src = (byte*) buffer.ToPointer();
 
-                        for (int y = 0; y < height; y++)
+                        for (int y = 0; y < this.height; y++)
                         {
                             Win32.memcpy(dst, src, srcStride);
                             dst -= dstStride;
@@ -610,7 +610,7 @@ namespace AForge.Video.DirectShow
                     image.UnlockBits(imageData);
 
                     // notify parent
-                    parent.OnNewFrame(image);
+                    this.parent.OnNewFrame(image);
 
                     // release the image
                     image.Dispose();
