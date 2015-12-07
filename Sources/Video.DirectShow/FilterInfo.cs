@@ -123,7 +123,7 @@ namespace AForge.Video.DirectShow
         //
         private string GetName(IMoniker moniker)
         {
-            Object bagObj = null;
+            object bagObj = null;
             IPropertyBag bag = null;
 
             try
@@ -169,7 +169,7 @@ namespace AForge.Video.DirectShow
         {
             IBindCtx bindCtx = null;
             IMoniker moniker = null;
-            String name = "";
+            string name = "";
             int n = 0;
 
             // create bind context
@@ -188,6 +188,15 @@ namespace AForge.Video.DirectShow
                 bindCtx = null;
             }
             return name;
+        }
+
+        /// <summary>
+        ///     Get the filter info name.
+        /// </summary>
+        /// <returns>Content of the property "Name".</returns>
+        public override string ToString()
+        {
+            return this.Name;
         }
     }
 }
