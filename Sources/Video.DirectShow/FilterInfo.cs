@@ -182,6 +182,7 @@ namespace AForge.Video.DirectShow
                     name = GetName(moniker);
 
                     Marshal.ReleaseComObject(moniker);
+                    
                     moniker = null;
                 }
                 Marshal.ReleaseComObject(bindCtx);

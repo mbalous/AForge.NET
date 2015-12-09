@@ -42,7 +42,7 @@ namespace AForge.Controls
     /// </code>
     /// </remarks>
     /// 
-    public class Chart : System.Windows.Forms.Control
+    public class Chart : Control
     {
         /// <summary>
         /// Chart series type enumeration.
@@ -92,10 +92,10 @@ namespace AForge.Controls
         [Browsable(false)]
         public Range RangeX
         {
-            get { return rangeX; }
+            get { return this.rangeX; }
             set
             {
-                rangeX = value;
+                this.rangeX = value;
                 UpdateYRange();
                 Invalidate();
             }
@@ -110,10 +110,10 @@ namespace AForge.Controls
         [Browsable(false)]
         public Range RangeY
         {
-            get { return rangeY; }
+            get { return this.rangeY; }
             set
             {
-                rangeY = value;
+                this.rangeY = value;
                 Invalidate();
             }
         }
@@ -121,7 +121,7 @@ namespace AForge.Controls
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private Container components = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Chart"/> class.
@@ -144,11 +144,11 @@ namespace AForge.Controls
         {
             if (disposing)
             {
-                if (components != null)
-                    components.Dispose();
+                if (this.components != null)
+                    this.components.Dispose();
 
                 // free graphics resources
-                blackPen.Dispose();
+                this.blackPen.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -175,28 +175,28 @@ namespace AForge.Controls
         private void Chart_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
-            int clientWidth = ClientRectangle.Width;
-            int clientHeight = ClientRectangle.Height;
+            int clientWidth = this.ClientRectangle.Width;
+            int clientHeight = this.ClientRectangle.Height;
 
             // fill with white background
-            Brush backgroundBrush = new SolidBrush(BackColor);
+            Brush backgroundBrush = new SolidBrush(this.BackColor);
             g.FillRectangle(backgroundBrush, 0, 0, clientWidth - 1, clientHeight - 1);
             backgroundBrush.Dispose();
 
             // draw a black rectangle
-            g.DrawRectangle(blackPen, 0, 0, clientWidth - 1, clientHeight - 1);
+            g.DrawRectangle(this.blackPen, 0, 0, clientWidth - 1, clientHeight - 1);
 
             // set clipping rectangle
             g.SetClip(new Rectangle(2, 2, clientWidth - 4, clientHeight - 4));
 
             // check if there are any data series
-            if (rangeX.Length != 0)
+            if (this.rangeX.Length != 0)
             {
-                double xFactor = (double) (clientWidth - 10)/(rangeX.Length);
-                double yFactor = (double) (clientHeight - 10)/((rangeY.Length != 0) ? rangeY.Length : 1);
+                double xFactor = (double) (clientWidth - 10)/(this.rangeX.Length);
+                double yFactor = (double) (clientHeight - 10)/((this.rangeY.Length != 0) ? this.rangeY.Length : 1);
 
                 // walk through all data series
-                foreach (KeyValuePair<string, DataSeries> kvp in seriesTable)
+                foreach (KeyValuePair<string, DataSeries> kvp in this.seriesTable)
                 {
                     DataSeries series = kvp.Value;
                     // get data of the series
@@ -217,8 +217,8 @@ namespace AForge.Controls
                         // draw all points
                         for (int i = 0, n = data.GetLength(0); i < n; i++)
                         {
-                            int x = (int) ((data[i, 0] - rangeX.Min)*xFactor);
-                            int y = (int) ((data[i, 1] - rangeY.Min)*yFactor);
+                            int x = (int) ((data[i, 0] - this.rangeX.Min)*xFactor);
+                            int y = (int) ((data[i, 1] - this.rangeY.Min)*yFactor);
 
                             x += 5;
                             y = clientHeight - 6 - y;
@@ -235,8 +235,8 @@ namespace AForge.Controls
                         int width = series.width;
                         int r = width >> 1;
 
-                        int x1 = (int) ((data[0, 0] - rangeX.Min)*xFactor);
-                        int y1 = (int) ((data[0, 1] - rangeY.Min)*yFactor);
+                        int x1 = (int) ((data[0, 0] - this.rangeX.Min)*xFactor);
+                        int y1 = (int) ((data[0, 1] - this.rangeY.Min)*yFactor);
 
                         x1 += 5;
                         y1 = clientHeight - 6 - y1;
@@ -245,8 +245,8 @@ namespace AForge.Controls
                         // draw all lines
                         for (int i = 1, n = data.GetLength(0); i < n; i++)
                         {
-                            int x2 = (int) ((data[i, 0] - rangeX.Min)*xFactor);
-                            int y2 = (int) ((data[i, 1] - rangeY.Min)*yFactor);
+                            int x2 = (int) ((data[i, 0] - this.rangeX.Min)*xFactor);
+                            int y2 = (int) ((data[i, 1] - this.rangeY.Min)*yFactor);
 
                             x2 += 5;
                             y2 = clientHeight - 6 - y2;
@@ -266,8 +266,8 @@ namespace AForge.Controls
                         // draw line
                         Pen pen = new Pen(series.color, series.width);
 
-                        int x1 = (int) ((data[0, 0] - rangeX.Min)*xFactor);
-                        int y1 = (int) ((data[0, 1] - rangeY.Min)*yFactor);
+                        int x1 = (int) ((data[0, 0] - this.rangeX.Min)*xFactor);
+                        int y1 = (int) ((data[0, 1] - this.rangeY.Min)*yFactor);
 
                         x1 += 5;
                         y1 = clientHeight - 6 - y1;
@@ -275,8 +275,8 @@ namespace AForge.Controls
                         // draw all lines
                         for (int i = 1, n = data.GetLength(0); i < n; i++)
                         {
-                            int x2 = (int) ((data[i, 0] - rangeX.Min)*xFactor);
-                            int y2 = (int) ((data[i, 1] - rangeY.Min)*yFactor);
+                            int x2 = (int) ((data[i, 0] - this.rangeX.Min)*xFactor);
+                            int y2 = (int) ((data[i, 1] - this.rangeY.Min)*yFactor);
 
                             x2 += 5;
                             y2 = clientHeight - 6 - y2;
@@ -347,7 +347,7 @@ namespace AForge.Controls
             series.width = width;
             series.updateYRange = updateYRange;
             // add to series table
-            seriesTable.Add(name, series);
+            this.seriesTable.Add(name, series);
         }
 
         /// <summary>
@@ -359,11 +359,11 @@ namespace AForge.Controls
         /// 
         public void UpdateDataSeries(string name, double[,] data)
         {
-            if (!seriesTable.ContainsKey(name))
+            if (!this.seriesTable.ContainsKey(name))
                 throw new ArgumentException("The chart does not contain data series with name: " + name);
 
             // get data series
-            DataSeries series = seriesTable[name];
+            DataSeries series = this.seriesTable[name];
             // update data
             series.data = (data != null) ? (double[,]) data.Clone() : null;
 
@@ -383,7 +383,7 @@ namespace AForge.Controls
         public void RemoveDataSeries(string name)
         {
             // remove data series from table
-            seriesTable.Remove(name);
+            this.seriesTable.Remove(name);
             // invalidate the control
             Invalidate();
         }
@@ -394,7 +394,7 @@ namespace AForge.Controls
         public void RemoveAllDataSeries()
         {
             // remove all data series from table
-            seriesTable.Clear();
+            this.seriesTable.Clear();
             // invalidate the control
             Invalidate();
         }
@@ -408,7 +408,7 @@ namespace AForge.Controls
             float maxY = float.MinValue;
 
             // walk through all data series
-            foreach (KeyValuePair<string, DataSeries> kvp in seriesTable)
+            foreach (KeyValuePair<string, DataSeries> kvp in this.seriesTable)
             {
                 DataSeries series = kvp.Value;
                 // get data of the series
@@ -418,7 +418,7 @@ namespace AForge.Controls
                 {
                     for (int i = 0, n = data.GetLength(0); i < n; i++)
                     {
-                        if (rangeX.IsInside((float) data[i, 0]))
+                        if (this.rangeX.IsInside((float) data[i, 0]))
                         {
                             float v = (float) data[i, 1];
 
@@ -436,7 +436,7 @@ namespace AForge.Controls
             // update Y range, if there are any data
             if ((minY != double.MaxValue) || (maxY != double.MinValue))
             {
-                rangeY = new Range(minY, maxY);
+                this.rangeY = new Range(minY, maxY);
             }
         }
     }

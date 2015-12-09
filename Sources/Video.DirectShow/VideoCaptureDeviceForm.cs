@@ -32,22 +32,21 @@ namespace AForge.Video.DirectShow
     public partial class VideoCaptureDeviceForm : Form
     {
         // collection of available video devices
-        private FilterInfoCollection videoDevices;
+        private FilterInfoCollection _videoDevices;
         // selected video device
-        private VideoCaptureDevice videoDevice;
 
         // supported capabilities of video and snapshots
-        private Dictionary<string, VideoCapabilities> videoCapabilitiesDictionary =
+        private Dictionary<string, VideoCapabilities> _videoCapabilitiesDictionary =
             new Dictionary<string, VideoCapabilities>();
 
-        private Dictionary<string, VideoCapabilities> snapshotCapabilitiesDictionary =
+        private Dictionary<string, VideoCapabilities> _snapshotCapabilitiesDictionary =
             new Dictionary<string, VideoCapabilities>();
 
         // available video inputs
-        private VideoInput[] availableVideoInputs = null;
+        private VideoInput[] _availableVideoInputs = null;
 
         // flag telling if user wants to configure snapshots as well
-        private bool configureSnapshots = false;
+        private bool _configureSnapshots = false;
 
         /// <summary>
         /// Specifies if snapshot configuration should be done or not.
@@ -70,10 +69,10 @@ namespace AForge.Video.DirectShow
         /// 
         public bool ConfigureSnapshots
         {
-            get { return this.configureSnapshots; }
+            get { return this._configureSnapshots; }
             set
             {
-                this.configureSnapshots = value;
+                this._configureSnapshots = value;
                 this.snapshotsLabel.Visible = value;
                 this.snapshotResolutionsCombo.Visible = value;
             }
@@ -87,15 +86,7 @@ namespace AForge.Video.DirectShow
         /// the dialog using "OK" button. If user canceled the dialog, the property is
         /// set to <see langword="null"/>.</para></remarks>
         /// 
-        public VideoCaptureDevice VideoDevice
-        {
-            get { return this.videoDevice; }
-        }
-
-        private string videoDeviceMoniker = string.Empty;
-        private Size captureSize = new Size(0, 0);
-        private Size snapshotSize = new Size(0, 0);
-        private VideoInput videoInput = VideoInput.Default;
+        public VideoCaptureDevice VideoDevice { get; private set; }
 
         /// <summary>
         /// Moniker string of the selected video device.
@@ -105,11 +96,7 @@ namespace AForge.Video.DirectShow
         /// on form completion or set video device which should be selected by default on
         /// form loading.</para></remarks>
         /// 
-        public string VideoDeviceMoniker
-        {
-            get { return this.videoDeviceMoniker; }
-            set { this.videoDeviceMoniker = value; }
-        }
+        public string VideoDeviceMoniker { get; set; } = string.Empty;
 
         /// <summary>
         /// Video frame size of the selected device.
@@ -119,11 +106,7 @@ namespace AForge.Video.DirectShow
         /// on form completion or set the size to be selected by default on form loading.</para>
         /// </remarks>
         /// 
-        public Size CaptureSize
-        {
-            get { return this.captureSize; }
-            set { this.captureSize = value; }
-        }
+        public Size CaptureSize { get; set; } = new Size(0, 0);
 
         /// <summary>
         /// Snapshot frame size of the selected device.
@@ -133,11 +116,7 @@ namespace AForge.Video.DirectShow
         /// on form completion or set the size to be selected by default on form loading
         /// (if <see cref="ConfigureSnapshots"/> property is set <see langword="true"/>).</para>
         /// </remarks>
-        public Size SnapshotSize
-        {
-            get { return this.snapshotSize; }
-            set { this.snapshotSize = value; }
-        }
+        public Size SnapshotSize { get; set; } = new Size(0, 0);
 
         /// <summary>
         /// Video input to use with video capture card.
@@ -146,11 +125,7 @@ namespace AForge.Video.DirectShow
         /// <remarks><para>The property allows to get video input of the selected device
         /// on form completion or set it to be selected by default on form loading.</para></remarks>
         /// 
-        public VideoInput VideoInput
-        {
-            get { return this.videoInput; }
-            set { this.videoInput = value; }
-        }
+        public VideoInput VideoInput { get; set; } = VideoInput.Default;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoCaptureDeviceForm"/> class.
@@ -165,13 +140,13 @@ namespace AForge.Video.DirectShow
             try
             {
                 // enumerate video devices
-                this.videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+                this._videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
-                if (this.videoDevices.Count == 0)
+                if (this._videoDevices.Count == 0)
                     throw new ApplicationException();
 
                 // add all devices to combo
-                foreach (FilterInfo device in this.videoDevices)
+                foreach (FilterInfo device in this._videoDevices)
                 {
                     this.devicesCombo.Items.Add(device.Name);
                 }
@@ -189,9 +164,9 @@ namespace AForge.Video.DirectShow
         {
             int selectedCameraIndex = 0;
 
-            for (int i = 0; i < this.videoDevices.Count; i++)
+            for (int i = 0; i < this._videoDevices.Count; i++)
             {
-                if (this.videoDeviceMoniker == this.videoDevices[i].MonikerString)
+                if (this.VideoDeviceMoniker == this._videoDevices[i].MonikerString)
                 {
                     selectedCameraIndex = i;
                     break;
@@ -204,45 +179,45 @@ namespace AForge.Video.DirectShow
         // Ok button clicked
         private void okButton_Click(object sender, EventArgs e)
         {
-            this.videoDeviceMoniker = this.videoDevice.Source;
+            this.VideoDeviceMoniker = this.VideoDevice.Source;
 
             // set video size
-            if (this.videoCapabilitiesDictionary.Count != 0)
+            if (this._videoCapabilitiesDictionary.Count != 0)
             {
-                VideoCapabilities caps = this.videoCapabilitiesDictionary[(string) this.videoResolutionsCombo.SelectedItem];
+                VideoCapabilities caps = this._videoCapabilitiesDictionary[(string) this.videoResolutionsCombo.SelectedItem];
 
-                this.videoDevice.VideoResolution = caps;
-                this.captureSize = caps.FrameSize;
+                this.VideoDevice.VideoResolution = caps;
+                this.CaptureSize = caps.FrameSize;
             }
 
-            if (this.configureSnapshots)
+            if (this._configureSnapshots)
             {
                 // set snapshots size
-                if (this.snapshotCapabilitiesDictionary.Count != 0)
+                if (this._snapshotCapabilitiesDictionary.Count != 0)
                 {
-                    VideoCapabilities caps = this.snapshotCapabilitiesDictionary[(string) this.snapshotResolutionsCombo.SelectedItem];
+                    VideoCapabilities caps = this._snapshotCapabilitiesDictionary[(string) this.snapshotResolutionsCombo.SelectedItem];
 
-                    this.videoDevice.ProvideSnapshots = true;
-                    this.videoDevice.SnapshotResolution = caps;
+                    this.VideoDevice.ProvideSnapshots = true;
+                    this.VideoDevice.SnapshotResolution = caps;
 
-                    this.snapshotSize = caps.FrameSize;
+                    this.SnapshotSize = caps.FrameSize;
                 }
             }
 
-            if (this.availableVideoInputs.Length != 0)
+            if (this._availableVideoInputs.Length != 0)
             {
-                this.videoInput = this.availableVideoInputs[this.videoInputsCombo.SelectedIndex];
-                this.videoDevice.CrossbarVideoInput = this.videoInput;
+                this.VideoInput = this._availableVideoInputs[this.videoInputsCombo.SelectedIndex];
+                this.VideoDevice.CrossbarVideoInput = this.VideoInput;
             }
         }
 
         // New video device is selected
         private void devicesCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.videoDevices.Count != 0)
+            if (this._videoDevices.Count != 0)
             {
-                this.videoDevice = new VideoCaptureDevice(this.videoDevices[this.devicesCombo.SelectedIndex].MonikerString);
-                EnumeratedSupportedFrameSizes(this.videoDevice);
+                this.VideoDevice = new VideoCaptureDevice(this._videoDevices[this.devicesCombo.SelectedIndex].MonikerString);
+                EnumeratedSupportedFrameSizes(this.VideoDevice);
             }
         }
 
@@ -255,8 +230,8 @@ namespace AForge.Video.DirectShow
             this.snapshotResolutionsCombo.Items.Clear();
             this.videoInputsCombo.Items.Clear();
 
-            this.videoCapabilitiesDictionary.Clear();
-            this.snapshotCapabilitiesDictionary.Clear();
+            this._videoCapabilitiesDictionary.Clear();
+            this._snapshotCapabilitiesDictionary.Clear();
 
             try
             {
@@ -266,12 +241,11 @@ namespace AForge.Video.DirectShow
 
                 foreach (VideoCapabilities capabilty in videoCapabilities)
                 {
-                    string item = string.Format(
-                        "{0} x {1}", capabilty.FrameSize.Width, capabilty.FrameSize.Height);
+                    string item = $"{capabilty.FrameSize.Width} x {capabilty.FrameSize.Height}";
 
                     if (!this.videoResolutionsCombo.Items.Contains(item))
                     {
-                        if (this.captureSize == capabilty.FrameSize)
+                        if (this.CaptureSize == capabilty.FrameSize)
                         {
                             videoResolutionIndex = this.videoResolutionsCombo.Items.Count;
                         }
@@ -279,9 +253,9 @@ namespace AForge.Video.DirectShow
                         this.videoResolutionsCombo.Items.Add(item);
                     }
 
-                    if (!this.videoCapabilitiesDictionary.ContainsKey(item))
+                    if (!this._videoCapabilitiesDictionary.ContainsKey(item))
                     {
-                        this.videoCapabilitiesDictionary.Add(item, capabilty);
+                        this._videoCapabilitiesDictionary.Add(item, capabilty);
                     }
                 }
 
@@ -293,7 +267,7 @@ namespace AForge.Video.DirectShow
                 this.videoResolutionsCombo.SelectedIndex = videoResolutionIndex;
 
 
-                if (this.configureSnapshots)
+                if (this._configureSnapshots)
                 {
                     // collect snapshot capabilities
                     VideoCapabilities[] snapshotCapabilities = videoDevice.SnapshotCapabilities;
@@ -301,18 +275,17 @@ namespace AForge.Video.DirectShow
 
                     foreach (VideoCapabilities capabilty in snapshotCapabilities)
                     {
-                        string item = string.Format(
-                            "{0} x {1}", capabilty.FrameSize.Width, capabilty.FrameSize.Height);
+                        string item = $"{capabilty.FrameSize.Width} x {capabilty.FrameSize.Height}";
 
                         if (!this.snapshotResolutionsCombo.Items.Contains(item))
                         {
-                            if (this.snapshotSize == capabilty.FrameSize)
+                            if (this.SnapshotSize == capabilty.FrameSize)
                             {
                                 snapshotResolutionIndex = this.snapshotResolutionsCombo.Items.Count;
                             }
 
                             this.snapshotResolutionsCombo.Items.Add(item);
-                            this.snapshotCapabilitiesDictionary.Add(item, capabilty);
+                            this._snapshotCapabilitiesDictionary.Add(item, capabilty);
                         }
                     }
 
@@ -325,14 +298,14 @@ namespace AForge.Video.DirectShow
                 }
 
                 // get video inputs
-                this.availableVideoInputs = videoDevice.AvailableCrossbarVideoInputs;
+                this._availableVideoInputs = videoDevice.AvailableCrossbarVideoInputs;
                 int videoInputIndex = 0;
 
-                foreach (VideoInput input in this.availableVideoInputs)
+                foreach (VideoInput input in this._availableVideoInputs)
                 {
-                    string item = string.Format("{0}: {1}", input.Index, input.Type);
+                    string item = $"{input.Index}: {input.Type}";
 
-                    if ((input.Index == this.videoInput.Index) && (input.Type == this.videoInput.Type))
+                    if ((input.Index == this.VideoInput.Index) && (input.Type == this.VideoInput.Type))
                     {
                         videoInputIndex = this.videoInputsCombo.Items.Count;
                     }
@@ -340,7 +313,7 @@ namespace AForge.Video.DirectShow
                     this.videoInputsCombo.Items.Add(item);
                 }
 
-                if (this.availableVideoInputs.Length == 0)
+                if (this._availableVideoInputs.Length == 0)
                 {
                     this.videoInputsCombo.Items.Add("Not supported");
                 }

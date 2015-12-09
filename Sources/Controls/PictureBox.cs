@@ -52,7 +52,7 @@ namespace AForge.Controls
         /// 
         public new Image Image
         {
-            get { return sourceImage; }
+            get { return this.sourceImage; }
             set
             {
                 // check source image format
@@ -63,23 +63,23 @@ namespace AForge.Controls
                      (value.PixelFormat == PixelFormat.Format64bppArgb)))
                 {
                     // convert and display image
-                    Image tempImage = AForge.Imaging.Image.Convert16bppTo8bpp((Bitmap) value);
+                    Image tempImage = Imaging.Image.Convert16bppTo8bpp((Bitmap) value);
                     base.Image = tempImage;
 
                     // dispose previous image if required
-                    if (convertedImage != null)
+                    if (this.convertedImage != null)
                     {
-                        convertedImage.Dispose();
+                        this.convertedImage.Dispose();
                     }
 
-                    convertedImage = tempImage;
+                    this.convertedImage = tempImage;
                 }
                 else
                 {
                     // display source image as it is
                     base.Image = value;
                 }
-                sourceImage = value;
+                this.sourceImage = value;
             }
         }
     }

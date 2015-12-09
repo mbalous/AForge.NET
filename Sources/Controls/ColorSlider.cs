@@ -35,7 +35,7 @@ namespace AForge.Controls
     /// about available type and possible control's looks.</para>
     /// </remarks>
     /// 
-    public class ColorSlider : System.Windows.Forms.Control
+    public class ColorSlider : Control
     {
         private Pen blackPen = new Pen(Color.Black, 1);
         private Color startColor = Color.Black;
@@ -138,10 +138,10 @@ namespace AForge.Controls
         [DefaultValue(typeof (Color), "Black")]
         public Color StartColor
         {
-            get { return startColor; }
+            get { return this.startColor; }
             set
             {
-                startColor = value;
+                this.startColor = value;
                 Invalidate();
             }
         }
@@ -156,10 +156,10 @@ namespace AForge.Controls
         [DefaultValue(typeof (Color), "White")]
         public Color EndColor
         {
-            get { return endColor; }
+            get { return this.endColor; }
             set
             {
-                endColor = value;
+                this.endColor = value;
                 Invalidate();
             }
         }
@@ -174,10 +174,10 @@ namespace AForge.Controls
         [DefaultValue(typeof (Color), "Black")]
         public Color FillColor
         {
-            get { return fillColor; }
+            get { return this.fillColor; }
             set
             {
-                fillColor = value;
+                this.fillColor = value;
                 Invalidate();
             }
         }
@@ -192,12 +192,12 @@ namespace AForge.Controls
         [DefaultValue(ColorSliderType.Gradient)]
         public ColorSliderType Type
         {
-            get { return type; }
+            get { return this.type; }
             set
             {
-                type = value;
-                if ((type != ColorSliderType.Gradient) && (type != ColorSliderType.Threshold))
-                    DoubleArrow = true;
+                this.type = value;
+                if ((this.type != ColorSliderType.Gradient) && (this.type != ColorSliderType.Threshold))
+                    this.DoubleArrow = true;
                 Invalidate();
             }
         }
@@ -209,10 +209,10 @@ namespace AForge.Controls
         [DefaultValue(0)]
         public int Min
         {
-            get { return min; }
+            get { return this.min; }
             set
             {
-                min = value;
+                this.min = value;
                 Invalidate();
             }
         }
@@ -224,10 +224,10 @@ namespace AForge.Controls
         [DefaultValue(255)]
         public int Max
         {
-            get { return max; }
+            get { return this.max; }
             set
             {
-                max = value;
+                this.max = value;
                 Invalidate();
             }
         }
@@ -250,13 +250,13 @@ namespace AForge.Controls
         [DefaultValue(true)]
         public bool DoubleArrow
         {
-            get { return doubleArrow; }
+            get { return this.doubleArrow; }
             set
             {
-                doubleArrow = value;
-                if ((!doubleArrow) && (type != ColorSliderType.Threshold))
+                this.doubleArrow = value;
+                if ((!this.doubleArrow) && (this.type != ColorSliderType.Threshold))
                 {
-                    Type = ColorSliderType.Gradient;
+                    this.Type = ColorSliderType.Gradient;
                 }
                 Invalidate();
             }
@@ -275,9 +275,9 @@ namespace AForge.Controls
                      ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true);
 
             // load arrow bitmap
-            Assembly assembly = this.GetType().Assembly;
-            arrow = new Bitmap(assembly.GetManifestResourceStream("AForge.Controls.Resources.arrow.bmp"));
-            arrow.MakeTransparent(Color.FromArgb(255, 255, 255));
+            Assembly assembly = GetType().Assembly;
+            this.arrow = new Bitmap(assembly.GetManifestResourceStream("AForge.Controls.Resources.arrow.bmp"));
+            this.arrow.MakeTransparent(Color.FromArgb(255, 255, 255));
         }
 
         /// <summary>
@@ -290,8 +290,8 @@ namespace AForge.Controls
         {
             if (disposing)
             {
-                blackPen.Dispose();
-                arrow.Dispose();
+                this.blackPen.Dispose();
+                this.arrow.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -299,15 +299,15 @@ namespace AForge.Controls
         // Init component
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            SuspendLayout();
             // 
             // ColorSlider
             // 
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorSlider_Paint);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ColorSlider_MouseMove);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ColorSlider_MouseDown);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ColorSlider_MouseUp);
-            this.ResumeLayout(false);
+            this.Paint += new PaintEventHandler(ColorSlider_Paint);
+            this.MouseMove += new MouseEventHandler(ColorSlider_MouseMove);
+            this.MouseDown += new MouseEventHandler(ColorSlider_MouseDown);
+            this.MouseUp += new MouseEventHandler(ColorSlider_MouseUp);
+            ResumeLayout(false);
         }
 
         // Paint control
@@ -316,56 +316,56 @@ namespace AForge.Controls
             Graphics g = e.Graphics;
             Rectangle rc = this.ClientRectangle;
             Brush brush;
-            int x = (rc.Right - width)/2;
+            int x = (rc.Right - this.width)/2;
             int y = 2;
 
             // draw rectangle around the control
-            g.DrawRectangle(blackPen, x - 1, y - 1, width + 1, height + 1);
+            g.DrawRectangle(this.blackPen, x - 1, y - 1, this.width + 1, this.height + 1);
 
-            switch (type)
+            switch (this.type)
             {
                 case ColorSliderType.Gradient:
                 case ColorSliderType.InnerGradient:
                 case ColorSliderType.OuterGradient:
 
                     // create gradient brush
-                    brush = new LinearGradientBrush(new Point(x, 0), new Point(x + width, 0), startColor, endColor);
-                    g.FillRectangle(brush, x, y, width, height);
+                    brush = new LinearGradientBrush(new Point(x, 0), new Point(x + this.width, 0), this.startColor, this.endColor);
+                    g.FillRectangle(brush, x, y, this.width, this.height);
                     brush.Dispose();
 
                     // check type
-                    if (type == ColorSliderType.InnerGradient)
+                    if (this.type == ColorSliderType.InnerGradient)
                     {
                         // inner gradient
-                        brush = new SolidBrush(fillColor);
+                        brush = new SolidBrush(this.fillColor);
 
-                        if (min != 0)
+                        if (this.min != 0)
                         {
-                            g.FillRectangle(brush, x, y, min, height);
+                            g.FillRectangle(brush, x, y, this.min, this.height);
                         }
-                        if (max != 255)
+                        if (this.max != 255)
                         {
-                            g.FillRectangle(brush, x + max + 1, y, 255 - max, height);
+                            g.FillRectangle(brush, x + this.max + 1, y, 255 - this.max, this.height);
                         }
                         brush.Dispose();
                     }
-                    else if (type == ColorSliderType.OuterGradient)
+                    else if (this.type == ColorSliderType.OuterGradient)
                     {
                         // outer gradient
-                        brush = new SolidBrush(fillColor);
+                        brush = new SolidBrush(this.fillColor);
                         // fill space between min & max with color 3
-                        g.FillRectangle(brush, x + min, y, max - min + 1, height);
+                        g.FillRectangle(brush, x + this.min, y, this.max - this.min + 1, this.height);
                         brush.Dispose();
                     }
                     break;
                 case ColorSliderType.Threshold:
                     // 1 - fill with color 1
-                    brush = new SolidBrush(startColor);
-                    g.FillRectangle(brush, x, y, width, height);
+                    brush = new SolidBrush(this.startColor);
+                    g.FillRectangle(brush, x, y, this.width, this.height);
                     brush.Dispose();
                     // 2 - fill space between min & max with color 2
-                    brush = new SolidBrush(endColor);
-                    g.FillRectangle(brush, x + min, y, max - min + 1, height);
+                    brush = new SolidBrush(this.endColor);
+                    g.FillRectangle(brush, x + this.min, y, this.max - this.min + 1, this.height);
                     brush.Dispose();
                     break;
             }
@@ -373,74 +373,74 @@ namespace AForge.Controls
 
             // draw arrows
             x -= 4;
-            y += 1 + height;
+            y += 1 + this.height;
 
-            g.DrawImage(arrow, x + min, y, 9, 6);
-            if (doubleArrow)
-                g.DrawImage(arrow, x + max, y, 9, 6);
+            g.DrawImage(this.arrow, x + this.min, y, 9, 6);
+            if (this.doubleArrow)
+                g.DrawImage(this.arrow, x + this.max, y, 9, 6);
         }
 
         // On mouse down
-        private void ColorSlider_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void ColorSlider_MouseDown(object sender, MouseEventArgs e)
         {
-            int x = (ClientRectangle.Right - width)/2 - 4;
-            int y = 3 + height;
+            int x = (this.ClientRectangle.Right - this.width)/2 - 4;
+            int y = 3 + this.height;
 
             // check Y coordinate
             if ((e.Y >= y) && (e.Y < y + 6))
             {
                 // check X coordinate
-                if ((e.X >= x + min) && (e.X < x + min + 9))
+                if ((e.X >= x + this.min) && (e.X < x + this.min + 9))
                 {
                     // left arrow
-                    trackMode = 1;
-                    dx = e.X - min;
+                    this.trackMode = 1;
+                    this.dx = e.X - this.min;
                 }
-                if ((doubleArrow) && (e.X >= x + max) && (e.X < x + max + 9))
+                if ((this.doubleArrow) && (e.X >= x + this.max) && (e.X < x + this.max + 9))
                 {
                     // right arrow
-                    trackMode = 2;
-                    dx = e.X - max;
+                    this.trackMode = 2;
+                    this.dx = e.X - this.max;
                 }
 
-                if (trackMode != 0)
+                if (this.trackMode != 0)
                     this.Capture = true;
             }
         }
 
         // On mouse up
-        private void ColorSlider_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void ColorSlider_MouseUp(object sender, MouseEventArgs e)
         {
-            if (trackMode != 0)
+            if (this.trackMode != 0)
             {
                 // release capture
                 this.Capture = false;
-                trackMode = 0;
+                this.trackMode = 0;
 
                 // notify client
-                if (ValuesChanged != null)
-                    ValuesChanged(this, new EventArgs());
+                if (this.ValuesChanged != null)
+                    this.ValuesChanged(this, new EventArgs());
             }
         }
 
         // On mouse move
-        private void ColorSlider_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void ColorSlider_MouseMove(object sender, MouseEventArgs e)
         {
-            if (trackMode != 0)
+            if (this.trackMode != 0)
             {
-                if (trackMode == 1)
+                if (this.trackMode == 1)
                 {
                     // left arrow tracking
-                    min = e.X - dx;
-                    min = Math.Max(min, 0);
-                    min = Math.Min(min, max);
+                    this.min = e.X - this.dx;
+                    this.min = Math.Max(this.min, 0);
+                    this.min = Math.Min(this.min, this.max);
                 }
-                if (trackMode == 2)
+                if (this.trackMode == 2)
                 {
                     // right arrow tracking
-                    max = e.X - dx;
-                    max = Math.Max(max, min);
-                    max = Math.Min(max, 255);
+                    this.max = e.X - this.dx;
+                    this.max = Math.Max(this.max, this.min);
+                    this.max = Math.Min(this.max, 255);
                 }
 
                 // repaint control

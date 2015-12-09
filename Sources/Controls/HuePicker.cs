@@ -34,7 +34,7 @@ namespace AForge.Controls
     /// </para>
     /// </remarks>
     /// 
-    public class HuePicker : System.Windows.Forms.Control
+    public class HuePicker : Control
     {
         private HuePickerType type = HuePickerType.Value;
 
@@ -93,12 +93,12 @@ namespace AForge.Controls
         [DefaultValue(0)]
         public int Value
         {
-            get { return min; }
+            get { return this.min; }
             set
             {
-                if (type == HuePickerType.Value)
+                if (this.type == HuePickerType.Value)
                 {
-                    min = Math.Max(0, Math.Min(359, value));
+                    this.min = Math.Max(0, Math.Min(359, value));
                     Invalidate();
                 }
             }
@@ -110,12 +110,12 @@ namespace AForge.Controls
         [DefaultValue(0)]
         public int Min
         {
-            get { return min; }
+            get { return this.min; }
             set
             {
-                if (type == HuePickerType.Range)
+                if (this.type == HuePickerType.Range)
                 {
-                    min = Math.Max(0, Math.Min(359, value));
+                    this.min = Math.Max(0, Math.Min(359, value));
                     Invalidate();
                 }
             }
@@ -127,12 +127,12 @@ namespace AForge.Controls
         [DefaultValue(359)]
         public int Max
         {
-            get { return max; }
+            get { return this.max; }
             set
             {
-                if (type == HuePickerType.Range)
+                if (this.type == HuePickerType.Range)
                 {
-                    max = Math.Max(0, Math.Min(359, value));
+                    this.max = Math.Max(0, Math.Min(359, value));
                     Invalidate();
                 }
             }
@@ -147,10 +147,10 @@ namespace AForge.Controls
         [DefaultValue(HuePickerType.Value)]
         public HuePickerType Type
         {
-            get { return type; }
+            get { return this.type; }
             set
             {
-                type = value;
+                this.type = value;
                 Invalidate();
             }
         }
@@ -166,10 +166,10 @@ namespace AForge.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw |
                      ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true);
 
-            blackPen = new Pen(Color.Black, 1);
-            blackBrush = new SolidBrush(Color.Black);
-            whitePen = new Pen(Color.White, 1);
-            whiteBrush = new SolidBrush(Color.White);
+            this.blackPen = new Pen(Color.Black, 1);
+            this.blackBrush = new SolidBrush(Color.Black);
+            this.whitePen = new Pen(Color.White, 1);
+            this.whiteBrush = new SolidBrush(Color.White);
         }
 
         /// <summary>
@@ -182,10 +182,10 @@ namespace AForge.Controls
         {
             if (disposing)
             {
-                blackPen.Dispose();
-                blackBrush.Dispose();
-                whitePen.Dispose();
-                whiteBrush.Dispose();
+                this.blackPen.Dispose();
+                this.blackBrush.Dispose();
+                this.whitePen.Dispose();
+                this.whiteBrush.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -196,9 +196,9 @@ namespace AForge.Controls
             // 
             // HSLPicker
             // 
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.HSLPicker_MouseUp);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.HSLPicker_MouseMove);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.HSLPicker_MouseDown);
+            this.MouseUp += new MouseEventHandler(HSLPicker_MouseUp);
+            this.MouseMove += new MouseEventHandler(HSLPicker_MouseMove);
+            this.MouseDown += new MouseEventHandler(HSLPicker_MouseDown);
         }
 
         /// <summary>
@@ -223,14 +223,14 @@ namespace AForge.Controls
             hsl.Luminance = 0.5f;
             hsl.Saturation = 1.0f;
 
-            if (type == HuePickerType.Value)
+            if (this.type == HuePickerType.Value)
             {
                 // draw HSL pie
                 for (int i = 0; i < 360; i++)
                 {
                     hsl.Hue = i;
                     // convert from HSL to RGB
-                    AForge.Imaging.HSL.ToRGB(hsl, rgb);
+                    HSL.ToRGB(hsl, rgb);
                     // create brush
                     brush = new SolidBrush(rgb.Color);
                     // draw one hue value
@@ -245,12 +245,12 @@ namespace AForge.Controls
                 for (int i = 0; i < 360; i++)
                 {
                     if (
-                        ((min < max) && (i >= min) && (i <= max)) ||
-                        ((min > max) && ((i >= min) || (i <= max))))
+                        ((this.min < this.max) && (i >= this.min) && (i <= this.max)) ||
+                        ((this.min > this.max) && ((i >= this.min) || (i <= this.max))))
                     {
                         hsl.Hue = i;
                         // convert from HSL to RGB
-                        AForge.Imaging.HSL.ToRGB(hsl, rgb);
+                        HSL.ToRGB(hsl, rgb);
                         // create brush
                         brush = new SolidBrush(rgb.Color);
                     }
@@ -268,115 +268,115 @@ namespace AForge.Controls
 
             //
             double halfWidth = (double) rcPie.Width/2;
-            double angleRad = -min*Math.PI/180;
+            double angleRad = -this.min*Math.PI/180;
             double angleCos = Math.Cos(angleRad);
             double angleSin = Math.Sin(angleRad);
 
             double x = halfWidth*angleCos;
             double y = halfWidth*angleSin;
 
-            ptCenter.X = rcPie.Left + (int) (halfWidth);
-            ptCenter.Y = rcPie.Top + (int) (halfWidth);
-            ptMin.X = rcPie.Left + (int) (halfWidth + x);
-            ptMin.Y = rcPie.Top + (int) (halfWidth + y);
+            this.ptCenter.X = rcPie.Left + (int) (halfWidth);
+            this.ptCenter.Y = rcPie.Top + (int) (halfWidth);
+            this.ptMin.X = rcPie.Left + (int) (halfWidth + x);
+            this.ptMin.Y = rcPie.Top + (int) (halfWidth + y);
 
             // draw MIN pointer
-            g.FillEllipse(blackBrush,
+            g.FillEllipse(this.blackBrush,
                 rcPie.Left + (int) (halfWidth + x) - 4,
                 rcPie.Top + (int) (halfWidth + y) - 4,
                 8, 8);
-            g.DrawLine(blackPen, ptCenter, ptMin);
+            g.DrawLine(this.blackPen, this.ptCenter, this.ptMin);
 
             // check picker type
-            if (type == HuePickerType.Range)
+            if (this.type == HuePickerType.Range)
             {
-                angleRad = -max*Math.PI/180;
+                angleRad = -this.max*Math.PI/180;
                 angleCos = Math.Cos(angleRad);
                 angleSin = Math.Sin(angleRad);
 
                 x = halfWidth*angleCos;
                 y = halfWidth*angleSin;
 
-                ptMax.X = rcPie.Left + (int) (halfWidth + x);
-                ptMax.Y = rcPie.Top + (int) (halfWidth + y);
+                this.ptMax.X = rcPie.Left + (int) (halfWidth + x);
+                this.ptMax.Y = rcPie.Top + (int) (halfWidth + y);
 
                 // draw MAX pointer
-                g.FillEllipse(whiteBrush,
+                g.FillEllipse(this.whiteBrush,
                     rcPie.Left + (int) (halfWidth + x) - 4,
                     rcPie.Top + (int) (halfWidth + y) - 4,
                     8, 8);
-                g.DrawLine(whitePen, ptCenter, ptMax);
+                g.DrawLine(this.whitePen, this.ptCenter, this.ptMax);
             }
 
             base.OnPaint(pe);
         }
 
         // On mouse down
-        private void HSLPicker_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void HSLPicker_MouseDown(object sender, MouseEventArgs e)
         {
             // check coordinates of MIN pointer
-            if ((e.X >= ptMin.X - 4) && (e.Y >= ptMin.Y - 4) &&
-                (e.X < ptMin.X + 4) && (e.Y < ptMin.Y + 4))
+            if ((e.X >= this.ptMin.X - 4) && (e.Y >= this.ptMin.Y - 4) &&
+                (e.X < this.ptMin.X + 4) && (e.Y < this.ptMin.Y + 4))
             {
-                trackMode = 1;
+                this.trackMode = 1;
             }
-            if (type == HuePickerType.Range)
+            if (this.type == HuePickerType.Range)
             {
                 // check coordinates of MAX pointer
-                if ((e.X >= ptMax.X - 4) && (e.Y >= ptMax.Y - 4) &&
-                    (e.X < ptMax.X + 4) && (e.Y < ptMax.Y + 4))
+                if ((e.X >= this.ptMax.X - 4) && (e.Y >= this.ptMax.Y - 4) &&
+                    (e.X < this.ptMax.X + 4) && (e.Y < this.ptMax.Y + 4))
                 {
-                    trackMode = 2;
+                    this.trackMode = 2;
                 }
             }
 
-            if (trackMode != 0)
+            if (this.trackMode != 0)
                 this.Capture = true;
         }
 
         // On mouse up
-        private void HSLPicker_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void HSLPicker_MouseUp(object sender, MouseEventArgs e)
         {
-            if (trackMode != 0)
+            if (this.trackMode != 0)
             {
                 // release capture
                 this.Capture = false;
-                trackMode = 0;
+                this.trackMode = 0;
 
                 // notify client
-                if (ValuesChanged != null)
-                    ValuesChanged(this, new EventArgs());
+                if (this.ValuesChanged != null)
+                    this.ValuesChanged(this, new EventArgs());
             }
         }
 
         // On mouse move
-        private void HSLPicker_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void HSLPicker_MouseMove(object sender, MouseEventArgs e)
         {
             Cursor cursor = Cursors.Default;
 
-            if (trackMode != 0)
+            if (this.trackMode != 0)
             {
                 cursor = Cursors.Hand;
 
-                int dy = e.Y - ptCenter.Y;
-                int dx = e.X - ptCenter.X;
+                int dy = e.Y - this.ptCenter.Y;
+                int dx = e.X - this.ptCenter.X;
 
-                if (trackMode == 1)
+                if (this.trackMode == 1)
                 {
                     // MIN pointer tracking
-                    min = (int) (Math.Atan2(-dy, dx)*180/Math.PI);
-                    if (min < 0)
+                    this.min = (int) (Math.Atan2(-dy, dx)*180/Math.PI);
+                    if (this.min < 0)
                     {
-                        min = 360 + min;
+                        this.min = 360 + this.min;
                     }
                 }
                 else
                 {
                     // MAX pointer tracking
-                    max = (int) (Math.Atan2(-dy, dx)*180/Math.PI);
-                    if (max < 0)
+                    this.max = (int) (Math.Atan2(-dy, dx)*180/Math.PI);
+                    if (this.max < 0)
                     {
-                        max = 360 + max;
+                        this.max = 360 + this.max;
                     }
                 }
 
@@ -386,16 +386,16 @@ namespace AForge.Controls
             else
             {
                 // check coordinates of MIN pointer
-                if ((e.X >= ptMin.X - 4) && (e.Y >= ptMin.Y - 4) &&
-                    (e.X < ptMin.X + 4) && (e.Y < ptMin.Y + 4))
+                if ((e.X >= this.ptMin.X - 4) && (e.Y >= this.ptMin.Y - 4) &&
+                    (e.X < this.ptMin.X + 4) && (e.Y < this.ptMin.Y + 4))
                 {
                     cursor = Cursors.Hand;
                 }
-                if (type == HuePickerType.Range)
+                if (this.type == HuePickerType.Range)
                 {
                     // check coordinates of MAX pointer
-                    if ((e.X >= ptMax.X - 4) && (e.Y >= ptMax.Y - 4) &&
-                        (e.X < ptMax.X + 4) && (e.Y < ptMax.Y + 4))
+                    if ((e.X >= this.ptMax.X - 4) && (e.Y >= this.ptMax.Y - 4) &&
+                        (e.X < this.ptMax.X + 4) && (e.Y < this.ptMax.Y + 4))
                     {
                         cursor = Cursors.Hand;
                     }

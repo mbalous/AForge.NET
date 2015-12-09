@@ -70,7 +70,6 @@ namespace AForge.Video.DirectShow
             ICreateDevEnum enumDev = null;
             IEnumMoniker enumMon = null;
             IMoniker[] devMon = new IMoniker[1];
-            int hr;
 
             try
             {
@@ -84,7 +83,7 @@ namespace AForge.Video.DirectShow
                 enumDev = (ICreateDevEnum) comObj;
 
                 // Create an enumerator to find filters of specified category
-                hr = enumDev.CreateClassEnumerator(ref category, out enumMon, 0);
+                int hr = enumDev.CreateClassEnumerator(ref category, out enumMon, 0);
                 if (hr != 0)
                     throw new ApplicationException("No devices of the category");
 

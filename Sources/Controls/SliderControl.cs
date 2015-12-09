@@ -72,8 +72,8 @@ namespace AForge.Controls
         [Description("Determines behaviour of manipulator, when mouse button is released.")]
         public bool ResetPositionOnMouseRelease
         {
-            get { return resetPositionOnMouseRelease; }
-            set { resetPositionOnMouseRelease = value; }
+            get { return this.resetPositionOnMouseRelease; }
+            set { this.resetPositionOnMouseRelease = value; }
         }
 
         /// <summary>
@@ -88,10 +88,10 @@ namespace AForge.Controls
         [Description("Color used for drawing borders.")]
         public Color BorderColor
         {
-            get { return borderPen.Color; }
+            get { return this.borderPen.Color; }
             set
             {
-                borderPen = new Pen(value);
+                this.borderPen = new Pen(value);
                 Invalidate();
             }
         }
@@ -108,10 +108,10 @@ namespace AForge.Controls
         [Description("Background color used for filling area corresponding to positive values.")]
         public Color PositiveAreaBrush
         {
-            get { return positiveAreaBrush.Color; }
+            get { return this.positiveAreaBrush.Color; }
             set
             {
-                positiveAreaBrush = new SolidBrush(value);
+                this.positiveAreaBrush = new SolidBrush(value);
                 Invalidate();
             }
         }
@@ -128,10 +128,10 @@ namespace AForge.Controls
         [Description("Background color used for filling top right quarter of the control.")]
         public Color NegativeAreaBrush
         {
-            get { return negativeAreaBrush.Color; }
+            get { return this.negativeAreaBrush.Color; }
             set
             {
-                negativeAreaBrush = new SolidBrush(value);
+                this.negativeAreaBrush = new SolidBrush(value);
                 Invalidate();
             }
         }
@@ -148,10 +148,10 @@ namespace AForge.Controls
         [Description("Color used for filling manipulator.")]
         public Color ManipulatorColor
         {
-            get { return manipulatorBrush.Color; }
+            get { return this.manipulatorBrush.Color; }
             set
             {
-                manipulatorBrush = new SolidBrush(value);
+                this.manipulatorBrush = new SolidBrush(value);
                 Invalidate();
             }
         }
@@ -168,20 +168,20 @@ namespace AForge.Controls
         [Description("Defines if control has horizontal or vertical look.")]
         public bool IsHorizontal
         {
-            get { return isHorizontal; }
+            get { return this.isHorizontal; }
             set
             {
-                isHorizontal = value;
+                this.isHorizontal = value;
 
                 if (value)
                 {
-                    leftMargin = manipulatorWidth/2 + 2;
-                    topMargin = manipulatorHeight/4;
+                    this.leftMargin = manipulatorWidth/2 + 2;
+                    this.topMargin = manipulatorHeight/4;
                 }
                 else
                 {
-                    leftMargin = manipulatorHeight/4;
-                    topMargin = manipulatorWidth/2 + 2;
+                    this.leftMargin = manipulatorHeight/4;
+                    this.topMargin = manipulatorWidth/2 + 2;
                 }
 
                 Invalidate();
@@ -198,10 +198,10 @@ namespace AForge.Controls
         [Browsable(false)]
         public float ManipulatorPosition
         {
-            get { return manipulatatorPosition; }
+            get { return this.manipulatatorPosition; }
             set
             {
-                manipulatatorPosition = Math.Max(-1.0f, Math.Min(1.0f, value));
+                this.manipulatatorPosition = Math.Max(-1.0f, Math.Min(1.0f, value));
                 Invalidate();
                 NotifyClients();
             }
@@ -233,7 +233,7 @@ namespace AForge.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.ResizeRedraw |
                      ControlStyles.DoubleBuffer | ControlStyles.UserPaint, true);
 
-            IsHorizontal = true;
+            this.IsHorizontal = true;
         }
 
         // Paint the control
@@ -241,50 +241,50 @@ namespace AForge.Controls
         {
             Graphics g = e.Graphics;
 
-            int clientWidth = ClientRectangle.Width;
-            int clientHeight = ClientRectangle.Height;
+            int clientWidth = this.ClientRectangle.Width;
+            int clientHeight = this.ClientRectangle.Height;
 
-            if (isHorizontal)
+            if (this.isHorizontal)
             {
                 // draw area
-                g.FillRectangle((this.Enabled) ? negativeAreaBrush : disabledBrash, leftMargin, topMargin,
-                    clientWidth/2 - leftMargin, manipulatorHeight/2);
-                g.FillRectangle((this.Enabled) ? positiveAreaBrush : disabledBrash, clientWidth/2, topMargin,
-                    clientWidth/2 - leftMargin, manipulatorHeight/2);
-                g.DrawRectangle(borderPen, leftMargin, topMargin,
-                    clientWidth - 1 - leftMargin*2, manipulatorHeight/2);
-                g.DrawLine(borderPen, clientWidth/2, topMargin, clientWidth/2, topMargin + manipulatorHeight/2);
+                g.FillRectangle((this.Enabled) ? this.negativeAreaBrush : this.disabledBrash, this.leftMargin, this.topMargin,
+                    clientWidth/2 - this.leftMargin, manipulatorHeight/2);
+                g.FillRectangle((this.Enabled) ? this.positiveAreaBrush : this.disabledBrash, clientWidth/2, this.topMargin,
+                    clientWidth/2 - this.leftMargin, manipulatorHeight/2);
+                g.DrawRectangle(this.borderPen, this.leftMargin, this.topMargin,
+                    clientWidth - 1 - this.leftMargin*2, manipulatorHeight/2);
+                g.DrawLine(this.borderPen, clientWidth/2, this.topMargin, clientWidth/2, this.topMargin + manipulatorHeight/2);
 
                 // calculate manipulator's center point
-                int ctrlManipulatorX = (int) (manipulatatorPosition*(clientWidth/2 - leftMargin) + clientWidth/2);
+                int ctrlManipulatorX = (int) (this.manipulatatorPosition*(clientWidth/2 - this.leftMargin) + clientWidth/2);
 
                 // draw manipulator
-                g.FillRectangle((this.Enabled) ? manipulatorBrush : disabledBrash, ctrlManipulatorX - manipulatorWidth/2,
+                g.FillRectangle((this.Enabled) ? this.manipulatorBrush : this.disabledBrash, ctrlManipulatorX - manipulatorWidth/2,
                     0,
                     manipulatorWidth, manipulatorHeight);
-                g.DrawRectangle(borderPen, ctrlManipulatorX - manipulatorWidth/2, 0,
+                g.DrawRectangle(this.borderPen, ctrlManipulatorX - manipulatorWidth/2, 0,
                     manipulatorWidth, manipulatorHeight);
             }
             else
             {
                 // draw area
-                g.FillRectangle((this.Enabled) ? positiveAreaBrush : disabledBrash, leftMargin, topMargin,
-                    manipulatorHeight/2, clientHeight/2 - topMargin);
-                g.FillRectangle((this.Enabled) ? negativeAreaBrush : disabledBrash, leftMargin, clientHeight/2,
-                    manipulatorHeight/2, clientHeight/2 - topMargin);
-                g.DrawRectangle(borderPen, leftMargin, topMargin,
-                    manipulatorHeight/2, clientHeight - 1 - topMargin*2);
-                g.DrawLine(borderPen, leftMargin, clientHeight/2, leftMargin + manipulatorHeight/2, clientHeight/2);
+                g.FillRectangle((this.Enabled) ? this.positiveAreaBrush : this.disabledBrash, this.leftMargin, this.topMargin,
+                    manipulatorHeight/2, clientHeight/2 - this.topMargin);
+                g.FillRectangle((this.Enabled) ? this.negativeAreaBrush : this.disabledBrash, this.leftMargin, clientHeight/2,
+                    manipulatorHeight/2, clientHeight/2 - this.topMargin);
+                g.DrawRectangle(this.borderPen, this.leftMargin, this.topMargin,
+                    manipulatorHeight/2, clientHeight - 1 - this.topMargin*2);
+                g.DrawLine(this.borderPen, this.leftMargin, clientHeight/2, this.leftMargin + manipulatorHeight/2, clientHeight/2);
 
 
                 // calculate manipulator's center point
-                int ctrlManipulatorY = (int) (-manipulatatorPosition*(clientHeight/2 - topMargin) + clientHeight/2);
+                int ctrlManipulatorY = (int) (-this.manipulatatorPosition*(clientHeight/2 - this.topMargin) + clientHeight/2);
 
                 // draw manipulator
-                g.FillRectangle((this.Enabled) ? manipulatorBrush : disabledBrash, 0,
+                g.FillRectangle((this.Enabled) ? this.manipulatorBrush : this.disabledBrash, 0,
                     ctrlManipulatorY - manipulatorWidth/2,
                     manipulatorHeight, manipulatorWidth);
-                g.DrawRectangle(borderPen, 0, ctrlManipulatorY - manipulatorWidth/2,
+                g.DrawRectangle(this.borderPen, 0, ctrlManipulatorY - manipulatorWidth/2,
                     manipulatorHeight, manipulatorWidth);
             }
         }
@@ -294,34 +294,34 @@ namespace AForge.Controls
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (isHorizontal)
+                if (this.isHorizontal)
                 {
                     if (
-                        (e.X >= leftMargin) &&
-                        (e.X < ClientRectangle.Width - leftMargin) &&
-                        (e.Y >= topMargin) &&
-                        (e.Y < ClientRectangle.Height - topMargin))
+                        (e.X >= this.leftMargin) &&
+                        (e.X < this.ClientRectangle.Width - this.leftMargin) &&
+                        (e.Y >= this.topMargin) &&
+                        (e.Y < this.ClientRectangle.Height - this.topMargin))
                     {
-                        int cx = e.X - ClientRectangle.Width/2;
-                        manipulatatorPosition = (float) cx/(ClientRectangle.Width/2 - leftMargin);
-                        tracking = true;
+                        int cx = e.X - this.ClientRectangle.Width/2;
+                        this.manipulatatorPosition = (float) cx/(this.ClientRectangle.Width/2 - this.leftMargin);
+                        this.tracking = true;
                     }
                 }
                 else
                 {
                     if (
-                        (e.X >= leftMargin) &&
-                        (e.X < ClientRectangle.Width - leftMargin) &&
-                        (e.Y >= topMargin) &&
-                        (e.Y < ClientRectangle.Height - topMargin))
+                        (e.X >= this.leftMargin) &&
+                        (e.X < this.ClientRectangle.Width - this.leftMargin) &&
+                        (e.Y >= this.topMargin) &&
+                        (e.Y < this.ClientRectangle.Height - this.topMargin))
                     {
-                        int cy = ClientRectangle.Height/2 - e.Y;
-                        manipulatatorPosition = (float) cy/(ClientRectangle.Height/2 - topMargin);
-                        tracking = true;
+                        int cy = this.ClientRectangle.Height/2 - e.Y;
+                        this.manipulatatorPosition = (float) cy/(this.ClientRectangle.Height/2 - this.topMargin);
+                        this.tracking = true;
                     }
                 }
 
-                if (tracking)
+                if (this.tracking)
                 {
                     this.Capture = true;
                     this.Cursor = Cursors.Hand;
@@ -329,8 +329,8 @@ namespace AForge.Controls
                     NotifyClients();
                     // start time, which is used to notify
                     // about manipulator's position change
-                    ticksBeforeNotificiation = -1;
-                    timer.Start();
+                    this.ticksBeforeNotificiation = -1;
+                    this.timer.Start();
                 }
             }
         }
@@ -338,19 +338,19 @@ namespace AForge.Controls
         // On mouse up event
         private void TurnControl_MouseUp(object sender, MouseEventArgs e)
         {
-            if ((e.Button == MouseButtons.Left) && (tracking))
+            if ((e.Button == MouseButtons.Left) && (this.tracking))
             {
-                tracking = false;
+                this.tracking = false;
                 this.Capture = false;
                 this.Cursor = Cursors.Arrow;
 
-                if (resetPositionOnMouseRelease)
+                if (this.resetPositionOnMouseRelease)
                 {
-                    manipulatatorPosition = 0;
+                    this.manipulatatorPosition = 0;
                 }
 
                 Invalidate();
-                timer.Stop();
+                this.timer.Stop();
 
                 NotifyClients();
             }
@@ -359,49 +359,49 @@ namespace AForge.Controls
         // On mouse move event
         private void TurnControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (tracking)
+            if (this.tracking)
             {
-                if (isHorizontal)
+                if (this.isHorizontal)
                 {
-                    int cx = e.X - ClientRectangle.Width/2;
-                    manipulatatorPosition = (float) cx/(ClientRectangle.Width/2 - leftMargin);
+                    int cx = e.X - this.ClientRectangle.Width/2;
+                    this.manipulatatorPosition = (float) cx/(this.ClientRectangle.Width/2 - this.leftMargin);
                 }
                 else
                 {
-                    int cy = ClientRectangle.Height/2 - e.Y;
-                    manipulatatorPosition = (float) cy/(ClientRectangle.Height/2 - topMargin);
+                    int cy = this.ClientRectangle.Height/2 - e.Y;
+                    this.manipulatatorPosition = (float) cy/(this.ClientRectangle.Height/2 - this.topMargin);
                 }
 
-                manipulatatorPosition = Math.Max(Math.Min(1, manipulatatorPosition), -1);
+                this.manipulatatorPosition = Math.Max(Math.Min(1, this.manipulatatorPosition), -1);
                 Invalidate();
 
                 // notify user after 10 timer ticks
-                ticksBeforeNotificiation = 5;
+                this.ticksBeforeNotificiation = 5;
             }
         }
 
         // Timer handler, which is used to notify clients about manipulator's changes
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (ticksBeforeNotificiation != -1)
+            if (this.ticksBeforeNotificiation != -1)
             {
                 // time to notify
-                if (ticksBeforeNotificiation == 0)
+                if (this.ticksBeforeNotificiation == 0)
                 {
                     // notify users
                     NotifyClients();
                 }
 
-                ticksBeforeNotificiation--;
+                this.ticksBeforeNotificiation--;
             }
         }
 
         // Notify client about changes of manipulator's position
         private void NotifyClients()
         {
-            if (PositionChanged != null)
+            if (this.PositionChanged != null)
             {
-                PositionChanged(this, manipulatatorPosition);
+                this.PositionChanged(this, this.manipulatatorPosition);
             }
         }
     }

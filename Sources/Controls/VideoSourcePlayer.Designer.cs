@@ -35,13 +35,13 @@ namespace AForge.Controls
         /// </summary>
         private void InitializeComponent( )
         {
-            this.SuspendLayout( );
+            this.SuspendLayout();
             // 
             // VideoSourcePlayer
             // 
-            this.Paint += new System.Windows.Forms.PaintEventHandler( this.VideoSourcePlayer_Paint );
-            this.ParentChanged += new System.EventHandler( this.VideoSourcePlayer_ParentChanged );
-            this.ResumeLayout( false );
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.VideoSourcePlayer_Paint);
+            this.ParentChanged += new System.EventHandler(this.VideoSourcePlayer_ParentChanged);
+            this.ResumeLayout(false);
 
         }
 

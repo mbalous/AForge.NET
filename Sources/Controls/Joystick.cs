@@ -66,10 +66,10 @@ namespace AForge.Controls
         {
             get
             {
-                if (info == null)
+                if (this.info == null)
                     throw new ApplicationException("Joystick was not initialized.");
 
-                return info;
+                return this.info;
             }
         }
 
@@ -91,7 +91,7 @@ namespace AForge.Controls
             /// </summary>
             public string Name
             {
-                get { return capabilities.name; }
+                get { return this.capabilities.name; }
             }
 
             /// <summary>
@@ -99,7 +99,7 @@ namespace AForge.Controls
             /// </summary>
             public int Axes
             {
-                get { return capabilities.axesNumber; }
+                get { return this.capabilities.axesNumber; }
             }
 
             /// <summary>
@@ -107,13 +107,13 @@ namespace AForge.Controls
             /// </summary>
             public int Buttons
             {
-                get { return capabilities.buttonsNumber; }
+                get { return this.capabilities.buttonsNumber; }
             }
 
             internal DeviceInfo(int id, JoystickAPI.JOYCAPS joyCaps)
             {
-                ID = id;
-                capabilities = joyCaps;
+                this.ID = id;
+                this.capabilities = joyCaps;
             }
         }
 
@@ -198,7 +198,7 @@ namespace AForge.Controls
                 throw new NotConnectedException("The requested joystick is not connected to the system.");
             }
 
-            info = new DeviceInfo(id, joyCaps);
+            this.info = new DeviceInfo(id, joyCaps);
         }
 
         private static JoystickAPI.JoyPosFlags[] requestFlags = new JoystickAPI.JoyPosFlags[]
@@ -232,16 +232,16 @@ namespace AForge.Controls
             JoystickAPI.JOYINFOEX ji = new JoystickAPI.JOYINFOEX();
 
             ji.size = System.Runtime.InteropServices.Marshal.SizeOf(ji);
-            ji.flags = (Info.capabilities.axesNumber > 5)
+            ji.flags = (this.Info.capabilities.axesNumber > 5)
                 ? JoystickAPI.JoyPosFlags.ReturnAll
-                : requestFlags[Info.capabilities.axesNumber];
+                : requestFlags[this.Info.capabilities.axesNumber];
 
-            if (JoystickAPI.joyGetPosEx(Info.ID, ji) != JoystickAPI.ResultCode.NoError)
+            if (JoystickAPI.joyGetPosEx(this.Info.ID, ji) != JoystickAPI.ResultCode.NoError)
             {
                 throw new NotConnectedException("The requested joystick is not connected to the system.");
             }
 
-            return new Status(ji, Info.capabilities);
+            return new Status(ji, this.Info.capabilities);
         }
 
         /// <summary>
@@ -269,9 +269,9 @@ namespace AForge.Controls
             {
                 get
                 {
-                    return (((status.flags & JoystickAPI.JoyPosFlags.ReturnX) == 0)
+                    return (((this.status.flags & JoystickAPI.JoyPosFlags.ReturnX) == 0)
                         ? 0
-                        : (float) (status.xPos - capabilities.xMin)/capabilities.xMax*2 - 1);
+                        : (float) (this.status.xPos - this.capabilities.xMin)/ this.capabilities.xMax*2 - 1);
                 }
             }
 
@@ -282,9 +282,9 @@ namespace AForge.Controls
             {
                 get
                 {
-                    return (((status.flags & JoystickAPI.JoyPosFlags.ReturnY) == 0)
+                    return (((this.status.flags & JoystickAPI.JoyPosFlags.ReturnY) == 0)
                         ? 0
-                        : (float) (status.yPos - capabilities.yMin)/capabilities.yMax*2 - 1);
+                        : (float) (this.status.yPos - this.capabilities.yMin)/ this.capabilities.yMax*2 - 1);
                 }
             }
 
@@ -295,9 +295,9 @@ namespace AForge.Controls
             {
                 get
                 {
-                    return (((status.flags & JoystickAPI.JoyPosFlags.ReturnZ) == 0)
+                    return (((this.status.flags & JoystickAPI.JoyPosFlags.ReturnZ) == 0)
                         ? 0
-                        : (float) (status.zPos - capabilities.zMin)/capabilities.zMax*2 - 1);
+                        : (float) (this.status.zPos - this.capabilities.zMin)/ this.capabilities.zMax*2 - 1);
                 }
             }
 
@@ -308,9 +308,9 @@ namespace AForge.Controls
             {
                 get
                 {
-                    return (((status.flags & JoystickAPI.JoyPosFlags.ReturnR) == 0)
+                    return (((this.status.flags & JoystickAPI.JoyPosFlags.ReturnR) == 0)
                         ? 0
-                        : (float) (status.rPos - capabilities.rMin)/capabilities.rMax*2 - 1);
+                        : (float) (this.status.rPos - this.capabilities.rMin)/ this.capabilities.rMax*2 - 1);
                 }
             }
 
@@ -321,9 +321,9 @@ namespace AForge.Controls
             {
                 get
                 {
-                    return (((status.flags & JoystickAPI.JoyPosFlags.ReturnU) == 0)
+                    return (((this.status.flags & JoystickAPI.JoyPosFlags.ReturnU) == 0)
                         ? 0
-                        : (float) (status.uPos - capabilities.uMin)/capabilities.uMax*2 - 1);
+                        : (float) (this.status.uPos - this.capabilities.uMin)/ this.capabilities.uMax*2 - 1);
                 }
             }
 
@@ -334,9 +334,9 @@ namespace AForge.Controls
             {
                 get
                 {
-                    return (((status.flags & JoystickAPI.JoyPosFlags.ReturnV) == 0)
+                    return (((this.status.flags & JoystickAPI.JoyPosFlags.ReturnV) == 0)
                         ? 0
-                        : (float) (status.vPos - capabilities.vMin)/capabilities.vMax*2 - 1);
+                        : (float) (this.status.vPos - this.capabilities.vMin)/ this.capabilities.vMax*2 - 1);
                 }
             }
 
@@ -345,7 +345,7 @@ namespace AForge.Controls
             /// </summary>
             public Buttons Buttons
             {
-                get { return (Buttons) status.buttons; }
+                get { return (Buttons) this.status.buttons; }
             }
 
             /// <summary>
@@ -354,7 +354,7 @@ namespace AForge.Controls
             /// 
             public float PointOfView
             {
-                get { return (status.pov > 35900) ? -1 : (float) status.pov/100; }
+                get { return (this.status.pov > 35900) ? -1 : (float) this.status.pov/100; }
             }
 
             /// <summary>
@@ -368,7 +368,7 @@ namespace AForge.Controls
             ///
             public bool IsButtonPressed(Buttons button)
             {
-                return ((((Buttons) status.buttons) & button) != 0);
+                return ((((Buttons) this.status.buttons) & button) != 0);
             }
         }
 
