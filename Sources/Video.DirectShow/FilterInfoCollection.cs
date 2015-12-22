@@ -85,7 +85,10 @@ namespace AForge.Video.DirectShow
                 // Create an enumerator to find filters of specified category
                 int hr = enumDev.CreateClassEnumerator(ref category, out enumMon, 0);
                 if (hr != 0)
-                    throw new ApplicationException("No devices of the category");
+                {
+                    return;
+                    //throw new ApplicationException("No devices of the category");
+                }
 
                 // Collect all filters
                 IntPtr n = IntPtr.Zero;
