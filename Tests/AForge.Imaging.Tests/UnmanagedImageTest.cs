@@ -1,18 +1,164 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using AForge;
-using AForge.Imaging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
 
 namespace AForge.Imaging.Tests
 {
     [TestFixture]
     public class UnmanagedImageTest
     {
+        [TestCase(PixelFormat.Format8bppIndexed)]
+        [TestCase(PixelFormat.Format24bppRgb)]
+        [TestCase(PixelFormat.Format32bppArgb)]
+        [TestCase(PixelFormat.Format32bppRgb)]
+        [TestCase(PixelFormat.Format16bppGrayScale)]
+        [TestCase(PixelFormat.Format48bppRgb)]
+        [TestCase(PixelFormat.Format64bppArgb)]
+        public void SetPixelTest(PixelFormat pixelFormat)
+        {
+            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
+            Color color = Color.White;
+            byte value = 255;
+
+            image.SetPixel(0, 0, color);
+            image.SetPixel(319, 0, color);
+            image.SetPixel(0, 239, color);
+            image.SetPixel(319, 239, value);
+            image.SetPixel(160, 120, value);
+
+            image.SetPixel(-1, -1, color);
+            image.SetPixel(320, 0, color);
+            image.SetPixel(0, 240, value);
+            image.SetPixel(320, 240, value);
+
+            List<IntPoint> pixels = image.CollectActivePixels();
+
+            Assert.AreEqual(5, pixels.Count);
+
+            Assert.IsTrue(pixels.Contains(new IntPoint(0, 0)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(319, 0)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(0, 239)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(319, 239)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(160, 120)));
+        }
+
+        [TestCase(PixelFormat.Format24bppRgb)]
+        [TestCase(PixelFormat.Format32bppArgb)]
+        [TestCase(PixelFormat.Format32bppRgb)]
+        public void SetGetPixelColor(PixelFormat pixelFormat)
+        {
+            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
+
+            image.SetPixel(0, 0, Color.FromArgb(255, 10, 20, 30));
+            image.SetPixel(319, 0, Color.FromArgb(127, 110, 120, 130));
+            image.SetPixel(0, 239, Color.FromArgb(64, 210, 220, 230));
+
+            Color color1 = image.GetPixel(0, 0);
+            Color color2 = image.GetPixel(319, 0);
+            Color color3 = image.GetPixel(0, 239);
+
+            Assert.AreEqual(10, color1.R);
+            Assert.AreEqual(20, color1.G);
+            Assert.AreEqual(30, color1.B);
+
+            Assert.AreEqual(110, color2.R);
+            Assert.AreEqual(120, color2.G);
+            Assert.AreEqual(130, color2.B);
+
+            Assert.AreEqual(210, color3.R);
+            Assert.AreEqual(220, color3.G);
+            Assert.AreEqual(230, color3.B);
+
+            if (pixelFormat == PixelFormat.Format32bppArgb)
+            {
+                Assert.AreEqual(255, color1.A);
+                Assert.AreEqual(127, color2.A);
+                Assert.AreEqual(64, color3.A);
+            }
+        }
+
+        [TestCase(PixelFormat.Format8bppIndexed)]
+        [TestCase(PixelFormat.Format24bppRgb)]
+        [TestCase(PixelFormat.Format32bppArgb)]
+        [TestCase(PixelFormat.Format32bppRgb)]
+        [TestCase(PixelFormat.Format16bppGrayScale)]
+        [TestCase(PixelFormat.Format48bppRgb)]
+        [TestCase(PixelFormat.Format64bppArgb)]
+        // TODO: Fix this
+        //[TestCase( PixelFormat.Format32bppPArgb, ExpectedResult = typeof( UnsupportedImageFormatException ) )]
+        public void SetPixelsTest(PixelFormat pixelFormat)
+        {
+            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
+            Color color = Color.White;
+            List<IntPoint> points = new List<IntPoint>();
+
+            points.Add(new IntPoint(0, 0));
+            points.Add(new IntPoint(319, 0));
+            points.Add(new IntPoint(0, 239));
+            points.Add(new IntPoint(319, 239));
+            points.Add(new IntPoint(160, 120));
+
+            points.Add(new IntPoint(-1, -1));
+            points.Add(new IntPoint(320, 0));
+            points.Add(new IntPoint(0, 240));
+            points.Add(new IntPoint(320, 240));
+
+            image.SetPixels(points, color);
+
+            List<IntPoint> pixels = image.CollectActivePixels();
+
+            Assert.AreEqual(5, pixels.Count);
+
+            Assert.IsTrue(pixels.Contains(new IntPoint(0, 0)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(319, 0)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(0, 239)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(319, 239)));
+            Assert.IsTrue(pixels.Contains(new IntPoint(160, 120)));
+        }
+
+        [TestCase(PixelFormat.Format24bppRgb, 1, 1, 240, 0, 0)]
+        [TestCase(PixelFormat.Format24bppRgb, 318, 1, 0, 240, 0)]
+        [TestCase(PixelFormat.Format24bppRgb, 318, 238, 240, 240, 0)]
+        [TestCase(PixelFormat.Format24bppRgb, 1, 238, 0, 0, 240)]
+        [TestCase(PixelFormat.Format24bppRgb, 160, 120, 240, 240, 240)]
+        [TestCase(PixelFormat.Format32bppArgb, 1, 1, 240, 0, 0)]
+        [TestCase(PixelFormat.Format32bppArgb, 318, 1, 0, 240, 0)]
+        [TestCase(PixelFormat.Format32bppArgb, 318, 238, 240, 240, 0)]
+        [TestCase(PixelFormat.Format32bppArgb, 1, 238, 0, 0, 240)]
+        [TestCase(PixelFormat.Format32bppArgb, 160, 120, 240, 240, 240)]
+        [TestCase(PixelFormat.Format32bppRgb, 1, 1, 240, 0, 0)]
+        [TestCase(PixelFormat.Format32bppRgb, 318, 1, 0, 240, 0)]
+        [TestCase(PixelFormat.Format32bppRgb, 318, 238, 240, 240, 0)]
+        [TestCase(PixelFormat.Format32bppRgb, 1, 238, 0, 0, 240)]
+        [TestCase(PixelFormat.Format32bppRgb, 160, 120, 240, 240, 240)]
+        [TestCase(PixelFormat.Format8bppIndexed, 1, 1, 128, 128, 128)]
+        [TestCase(PixelFormat.Format8bppIndexed, 318, 1, 96, 96, 96)]
+        [TestCase(PixelFormat.Format8bppIndexed, 318, 238, 192, 192, 192)]
+        [TestCase(PixelFormat.Format8bppIndexed, 1, 238, 32, 32, 32)]
+        [TestCase(PixelFormat.Format8bppIndexed, 160, 120, 255, 255, 255)]
+        public void ToManagedImageTest(PixelFormat pixelFormat, int x, int y, byte red, byte green, byte blue)
+        {
+            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
+
+            image.SetPixel(new IntPoint(x, y), Color.FromArgb(255, red, green, blue));
+
+            Bitmap bitmap = image.ToManagedImage();
+
+            // check colors of pixels
+            Assert.AreEqual(Color.FromArgb(255, red, green, blue), bitmap.GetPixel(x, y));
+
+            // make sure there are only 1 pixel
+            UnmanagedImage temp = UnmanagedImage.FromManagedImage(bitmap);
+
+            List<IntPoint> pixels = temp.CollectActivePixels();
+            Assert.AreEqual(1, pixels.Count);
+
+            image.Dispose();
+            bitmap.Dispose();
+            temp.Dispose();
+        }
+
         [Test]
         public void Collect8bppPixelValuesTest_Grayscale()
         {
@@ -205,47 +351,6 @@ namespace AForge.Imaging.Tests
             }
         }
 
-        [TestCase(PixelFormat.Format8bppIndexed)]
-        [TestCase(PixelFormat.Format24bppRgb)]
-        [TestCase(PixelFormat.Format32bppArgb)]
-        [TestCase(PixelFormat.Format32bppRgb)]
-        [TestCase(PixelFormat.Format16bppGrayScale)]
-        [TestCase(PixelFormat.Format48bppRgb)]
-        [TestCase(PixelFormat.Format64bppArgb)]
-        public void SetPixelTest(PixelFormat pixelFormat)
-        {
-            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
-            Color color = Color.White;
-            byte value = 255;
-
-            image.SetPixel(0, 0, color);
-            image.SetPixel(319, 0, color);
-            image.SetPixel(0, 239, color);
-            image.SetPixel(319, 239, value);
-            image.SetPixel(160, 120, value);
-
-            image.SetPixel(-1, -1, color);
-            image.SetPixel(320, 0, color);
-            image.SetPixel(0, 240, value);
-            image.SetPixel(320, 240, value);
-
-            List<IntPoint> pixels = image.CollectActivePixels();
-
-            Assert.AreEqual(5, pixels.Count);
-
-            Assert.IsTrue(pixels.Contains(new IntPoint(0, 0)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(319, 0)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(0, 239)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(319, 239)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(160, 120)));
-        }
-
-        [Test]
-        public void SetPixelTestUnsupportedFormat()
-        {
-            Assert.Throws<UnsupportedImageFormatException>(() => SetPixelTest(PixelFormat.Format32bppPArgb));
-        }
-
         [Test]
         public void SetGetPixelGrayscale()
         {
@@ -272,120 +377,10 @@ namespace AForge.Imaging.Tests
             Assert.AreEqual(64, color3.B);
         }
 
-        [TestCase(PixelFormat.Format24bppRgb)]
-        [TestCase(PixelFormat.Format32bppArgb)]
-        [TestCase(PixelFormat.Format32bppRgb)]
-        public void SetGetPixelColor(PixelFormat pixelFormat)
+        [Test]
+        public void SetPixelTestUnsupportedFormat()
         {
-            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
-
-            image.SetPixel(0, 0, Color.FromArgb(255, 10, 20, 30));
-            image.SetPixel(319, 0, Color.FromArgb(127, 110, 120, 130));
-            image.SetPixel(0, 239, Color.FromArgb(64, 210, 220, 230));
-
-            Color color1 = image.GetPixel(0, 0);
-            Color color2 = image.GetPixel(319, 0);
-            Color color3 = image.GetPixel(0, 239);
-
-            Assert.AreEqual(10, color1.R);
-            Assert.AreEqual(20, color1.G);
-            Assert.AreEqual(30, color1.B);
-
-            Assert.AreEqual(110, color2.R);
-            Assert.AreEqual(120, color2.G);
-            Assert.AreEqual(130, color2.B);
-
-            Assert.AreEqual(210, color3.R);
-            Assert.AreEqual(220, color3.G);
-            Assert.AreEqual(230, color3.B);
-
-            if (pixelFormat == PixelFormat.Format32bppArgb)
-            {
-                Assert.AreEqual(255, color1.A);
-                Assert.AreEqual(127, color2.A);
-                Assert.AreEqual(64, color3.A);
-            }
-        }
-
-        [TestCase(PixelFormat.Format8bppIndexed)]
-        [TestCase(PixelFormat.Format24bppRgb)]
-        [TestCase(PixelFormat.Format32bppArgb)]
-        [TestCase(PixelFormat.Format32bppRgb)]
-        [TestCase(PixelFormat.Format16bppGrayScale)]
-        [TestCase(PixelFormat.Format48bppRgb)]
-        [TestCase(PixelFormat.Format64bppArgb)]
-        // TODO: Fix this
-        //[TestCase( PixelFormat.Format32bppPArgb, ExpectedResult = typeof( UnsupportedImageFormatException ) )]
-        public void SetPixelsTest(PixelFormat pixelFormat)
-        {
-            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
-            Color color = Color.White;
-            List<IntPoint> points = new List<IntPoint>();
-
-            points.Add(new IntPoint(0, 0));
-            points.Add(new IntPoint(319, 0));
-            points.Add(new IntPoint(0, 239));
-            points.Add(new IntPoint(319, 239));
-            points.Add(new IntPoint(160, 120));
-
-            points.Add(new IntPoint(-1, -1));
-            points.Add(new IntPoint(320, 0));
-            points.Add(new IntPoint(0, 240));
-            points.Add(new IntPoint(320, 240));
-
-            image.SetPixels(points, color);
-
-            List<IntPoint> pixels = image.CollectActivePixels();
-
-            Assert.AreEqual(5, pixels.Count);
-
-            Assert.IsTrue(pixels.Contains(new IntPoint(0, 0)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(319, 0)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(0, 239)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(319, 239)));
-            Assert.IsTrue(pixels.Contains(new IntPoint(160, 120)));
-        }
-
-        [TestCase(PixelFormat.Format24bppRgb, 1, 1, 240, 0, 0)]
-        [TestCase(PixelFormat.Format24bppRgb, 318, 1, 0, 240, 0)]
-        [TestCase(PixelFormat.Format24bppRgb, 318, 238, 240, 240, 0)]
-        [TestCase(PixelFormat.Format24bppRgb, 1, 238, 0, 0, 240)]
-        [TestCase(PixelFormat.Format24bppRgb, 160, 120, 240, 240, 240)]
-        [TestCase(PixelFormat.Format32bppArgb, 1, 1, 240, 0, 0)]
-        [TestCase(PixelFormat.Format32bppArgb, 318, 1, 0, 240, 0)]
-        [TestCase(PixelFormat.Format32bppArgb, 318, 238, 240, 240, 0)]
-        [TestCase(PixelFormat.Format32bppArgb, 1, 238, 0, 0, 240)]
-        [TestCase(PixelFormat.Format32bppArgb, 160, 120, 240, 240, 240)]
-        [TestCase(PixelFormat.Format32bppRgb, 1, 1, 240, 0, 0)]
-        [TestCase(PixelFormat.Format32bppRgb, 318, 1, 0, 240, 0)]
-        [TestCase(PixelFormat.Format32bppRgb, 318, 238, 240, 240, 0)]
-        [TestCase(PixelFormat.Format32bppRgb, 1, 238, 0, 0, 240)]
-        [TestCase(PixelFormat.Format32bppRgb, 160, 120, 240, 240, 240)]
-        [TestCase(PixelFormat.Format8bppIndexed, 1, 1, 128, 128, 128)]
-        [TestCase(PixelFormat.Format8bppIndexed, 318, 1, 96, 96, 96)]
-        [TestCase(PixelFormat.Format8bppIndexed, 318, 238, 192, 192, 192)]
-        [TestCase(PixelFormat.Format8bppIndexed, 1, 238, 32, 32, 32)]
-        [TestCase(PixelFormat.Format8bppIndexed, 160, 120, 255, 255, 255)]
-        public void ToManagedImageTest(PixelFormat pixelFormat, int x, int y, byte red, byte green, byte blue)
-        {
-            UnmanagedImage image = UnmanagedImage.Create(320, 240, pixelFormat);
-
-            image.SetPixel(new IntPoint(x, y), Color.FromArgb(255, red, green, blue));
-
-            Bitmap bitmap = image.ToManagedImage();
-
-            // check colors of pixels
-            Assert.AreEqual(Color.FromArgb(255, red, green, blue), bitmap.GetPixel(x, y));
-
-            // make sure there are only 1 pixel
-            UnmanagedImage temp = UnmanagedImage.FromManagedImage(bitmap);
-
-            List<IntPoint> pixels = temp.CollectActivePixels();
-            Assert.AreEqual(1, pixels.Count);
-
-            image.Dispose();
-            bitmap.Dispose();
-            temp.Dispose();
+            Assert.Throws<UnsupportedImageFormatException>(() => SetPixelTest(PixelFormat.Format32bppPArgb));
         }
     }
 }
