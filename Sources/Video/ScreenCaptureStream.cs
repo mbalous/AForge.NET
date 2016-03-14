@@ -138,7 +138,7 @@ namespace AForge.Video
         public int FrameInterval
         {
             get { return frameInterval; }
-            set { frameInterval = Math.Max(0, value); }
+            set { frameInterval = Math.Max( 0, value ); }
         }
 
         /// <summary>
@@ -181,14 +181,14 @@ namespace AForge.Video
         {
             get
             {
-                if (thread != null)
+                if ( thread != null )
                 {
                     // check thread status
-                    if (thread.Join(0) == false)
+                    if ( thread.Join( 0 ) == false )
                         return true;
 
                     // the thread is not running, free resources
-                    Free();
+                    Free( );
                 }
                 return false;
             }
@@ -200,7 +200,7 @@ namespace AForge.Video
         /// 
         /// <param name="region">Screen's rectangle to capture (the rectangle may cover multiple displays).</param>
         /// 
-        public ScreenCaptureStream(Rectangle region)
+        public ScreenCaptureStream( Rectangle region )
         {
             this.region = region;
         }
@@ -212,7 +212,7 @@ namespace AForge.Video
         /// <param name="region">Screen's rectangle to capture (the rectangle may cover multiple displays).</param>
         /// <param name="frameInterval">Time interval between making screen shots, ms.</param>
         /// 
-        public ScreenCaptureStream(Rectangle region, int frameInterval)
+        public ScreenCaptureStream( Rectangle region, int frameInterval )
         {
             this.region = region;
             this.FrameInterval = frameInterval;
@@ -228,19 +228,19 @@ namespace AForge.Video
         /// 
         /// <exception cref="ArgumentException">Video source is not specified.</exception>
         /// 
-        public void Start()
+        public void Start( )
         {
-            if (!IsRunning)
+            if ( !IsRunning )
             {
                 framesReceived = 0;
 
                 // create events
-                stopEvent = new ManualResetEvent(false);
+                stopEvent = new ManualResetEvent( false );
 
                 // create and start new thread
-                thread = new Thread(new ThreadStart(WorkerThread));
+                thread = new Thread( new ThreadStart( WorkerThread ) );
                 thread.Name = Source; // mainly for debugging
-                thread.Start();
+                thread.Start( );
             }
         }
 
@@ -251,13 +251,13 @@ namespace AForge.Video
         /// <remarks>Signals video source to stop its background thread, stop to
         /// provide new frames and free resources.</remarks>
         /// 
-        public void SignalToStop()
+        public void SignalToStop( )
         {
             // stop thread
-            if (thread != null)
+            if ( thread != null )
             {
                 // signal to stop
-                stopEvent.Set();
+                stopEvent.Set( );
             }
         }
 
@@ -268,14 +268,14 @@ namespace AForge.Video
         /// <remarks>Waits for source stopping after it was signalled to stop using
         /// <see cref="SignalToStop"/> method.</remarks>
         /// 
-        public void WaitForStop()
+        public void WaitForStop( )
         {
-            if (thread != null)
+            if ( thread != null )
             {
                 // wait for thread stop
-                thread.Join();
+                thread.Join( );
 
-                Free();
+                Free( );
             }
         }
 
@@ -291,13 +291,13 @@ namespace AForge.Video
         /// <see cref="WaitForStop">waiting</see> for background thread's completion.</note></para>
         /// </remarks>
         /// 
-        public void Stop()
+        public void Stop( )
         {
-            if (this.IsRunning)
+            if ( this.IsRunning )
             {
-                stopEvent.Set();
-                thread.Abort();
-                WaitForStop();
+                stopEvent.Set( );
+                thread.Abort( );
+                WaitForStop( );
             }
         }
 
@@ -305,17 +305,17 @@ namespace AForge.Video
         /// Free resource.
         /// </summary>
         /// 
-        private void Free()
+        private void Free( )
         {
             thread = null;
 
             // release events
-            stopEvent.Close();
+            stopEvent.Close( );
             stopEvent = null;
         }
 
         // Worker thread
-        private void WorkerThread()
+        private void WorkerThread( )
         {
             int width = region.Width;
             int height = region.Height;
@@ -323,14 +323,14 @@ namespace AForge.Video
             int y = region.Location.Y;
             Size size = region.Size;
 
-            Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            Graphics graphics = Graphics.FromImage(bitmap);
+            Bitmap bitmap = new Bitmap( width, height, PixelFormat.Format32bppArgb );
+            Graphics graphics = Graphics.FromImage( bitmap );
 
             // download start time and duration
             DateTime start;
             TimeSpan span;
 
-            while (!stopEvent.WaitOne(0, false))
+            while ( !stopEvent.WaitOne( 0, false ) )
             {
                 // set dowbload start time
                 start = DateTime.Now;
@@ -338,58 +338,58 @@ namespace AForge.Video
                 try
                 {
                     // capture the screen
-                    graphics.CopyFromScreen(x, y, 0, 0, size, CopyPixelOperation.SourceCopy);
+                    graphics.CopyFromScreen( x, y, 0, 0, size, CopyPixelOperation.SourceCopy );
 
                     // increment frames counter
                     framesReceived++;
 
                     // provide new image to clients
-                    if (NewFrame != null)
+                    if ( NewFrame != null )
                     {
                         // notify client
-                        NewFrame(this, new NewFrameEventArgs(bitmap));
+                        NewFrame( this, new NewFrameEventArgs( bitmap ) );
                     }
 
                     // wait for a while ?
-                    if (frameInterval > 0)
+                    if ( frameInterval > 0 )
                     {
                         // get download duration
-                        span = DateTime.Now.Subtract(start);
+                        span = DateTime.Now.Subtract( start );
 
                         // miliseconds to sleep
                         int msec = frameInterval - (int) span.TotalMilliseconds;
 
-                        if ((msec > 0) && (stopEvent.WaitOne(msec, false)))
+                        if ( ( msec > 0 ) && ( stopEvent.WaitOne( msec, false ) ) )
                             break;
                     }
                 }
-                catch (ThreadAbortException)
+                catch ( ThreadAbortException )
                 {
                     break;
                 }
-                catch (Exception exception)
+                catch ( Exception exception )
                 {
                     // provide information to clients
-                    if (VideoSourceError != null)
+                    if ( VideoSourceError != null )
                     {
-                        VideoSourceError(this, new VideoSourceErrorEventArgs(exception.Message));
+                        VideoSourceError( this, new VideoSourceErrorEventArgs( exception.Message ) );
                     }
                     // wait for a while before the next try
-                    Thread.Sleep(250);
+                    Thread.Sleep( 250 );
                 }
 
                 // need to stop ?
-                if (stopEvent.WaitOne(0, false))
+                if ( stopEvent.WaitOne( 0, false ) )
                     break;
             }
 
             // release resources
-            graphics.Dispose();
-            bitmap.Dispose();
+            graphics.Dispose( );
+            bitmap.Dispose( );
 
-            if (PlayingFinished != null)
+            if ( PlayingFinished != null )
             {
-                PlayingFinished(this, ReasonToFinishPlaying.StoppedByUser);
+                PlayingFinished( this, ReasonToFinishPlaying.StoppedByUser );
             }
         }
     }

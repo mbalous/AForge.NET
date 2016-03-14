@@ -95,7 +95,7 @@ namespace AForge.Video
         /// object creates background thread and notifies about new frames with the
         /// help of <see cref="NewFrame"/> event.</remarks>
         /// 
-        void Start();
+        void Start( );
 
         /// <summary>
         /// Signal video source to stop its work.
@@ -104,7 +104,7 @@ namespace AForge.Video
         /// <remarks>Signals video source to stop its background thread, stop to
         /// provide new frames and free resources.</remarks>
         /// 
-        void SignalToStop();
+        void SignalToStop( );
 
         /// <summary>
         /// Wait for video source has stopped.
@@ -113,7 +113,7 @@ namespace AForge.Video
         /// <remarks>Waits for video source stopping after it was signalled to stop using
         /// <see cref="SignalToStop"/> method.</remarks>
         /// 
-        void WaitForStop();
+        void WaitForStop( );
 
         /// <summary>
         /// Stop video source.
@@ -121,6 +121,6 @@ namespace AForge.Video
         /// 
         /// <remarks>Stops video source aborting its thread.</remarks>
         /// 
-        void Stop();
+        void Stop( );
     }
 }
