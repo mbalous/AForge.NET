@@ -7,7 +7,7 @@ namespace AForge.Imaging.Tests
     [TestFixture]
     public class IntegralImageTest
     {
-        private readonly IntegralImage integralImage;
+        private readonly IntegralImage _integralImage;
 
         public IntegralImageTest()
         {
@@ -21,7 +21,7 @@ namespace AForge.Imaging.Tests
                 }
             }
 
-            this.integralImage = IntegralImage.FromBitmap(uImage);
+            this._integralImage = IntegralImage.FromBitmap(uImage);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace AForge.Imaging.Tests
         [TestCase(10, 9, 1, -1)]
         public void GetHaarXWavelet(int x, int y, int radius, int expectedValue)
         {
-            int value = this.integralImage.GetHaarXWavelet(x, y, radius);
+            int value = this._integralImage.GetHaarXWavelet(x, y, radius);
             Assert.AreEqual(value, expectedValue);
         }
 
@@ -50,7 +50,7 @@ namespace AForge.Imaging.Tests
         [TestCase(9, 10, 1, -1)]
         public void GetHaarYWavelet(int x, int y, int radius, int expectedValue)
         {
-            int value = this.integralImage.GetHaarYWavelet(x, y, radius);
+            int value = this._integralImage.GetHaarYWavelet(x, y, radius);
             Assert.AreEqual(value, expectedValue);
         }
 
@@ -66,7 +66,7 @@ namespace AForge.Imaging.Tests
         [TestCase(9, 0, 9, 0, 1)]
         public void GetRectangleMeanTest(int x1, int y1, int x2, int y2, float expectedMean)
         {
-            float mean = this.integralImage.GetRectangleMean(x1, y1, x2, y2);
+            float mean = this._integralImage.GetRectangleMean(x1, y1, x2, y2);
             Assert.AreEqual(mean, expectedMean);
         }
 
@@ -81,7 +81,7 @@ namespace AForge.Imaging.Tests
         [TestCase(9, 9, 10, 10, 0u)]
         public void GetRectangleSumTest(int x1, int y1, int x2, int y2, uint expectedSum)
         {
-            uint sum = this.integralImage.GetRectangleSum(x1, y1, x2, y2);
+            uint sum = this._integralImage.GetRectangleSum(x1, y1, x2, y2);
             Assert.AreEqual(sum, expectedSum);
         }
 
@@ -93,7 +93,7 @@ namespace AForge.Imaging.Tests
         [TestCase(2, 1, 1, 5u)]
         public void GetRectangleSumTest(int x, int y, int radius, uint expectedSum)
         {
-            uint sum = this.integralImage.GetRectangleSum(x, y, radius);
+            uint sum = this._integralImage.GetRectangleSum(x, y, radius);
             Assert.AreEqual(sum, expectedSum);
         }
 
@@ -106,7 +106,7 @@ namespace AForge.Imaging.Tests
         [TestCase(9, 9, 9, 9, 0u)]
         public void GetRectangleSumUnsafeTest(int x1, int y1, int x2, int y2, uint expectedSum)
         {
-            uint sum = this.integralImage.GetRectangleSum(x1, y1, x2, y2);
+            uint sum = this._integralImage.GetRectangleSum(x1, y1, x2, y2);
             Assert.AreEqual(sum, expectedSum);
         }
 
@@ -116,7 +116,7 @@ namespace AForge.Imaging.Tests
         [TestCase(2, 1, 1, 5u)]
         public void GetRectangleSumUnsafeTest(int x, int y, int radius, uint expectedSum)
         {
-            uint sum = this.integralImage.GetRectangleSum(x, y, radius);
+            uint sum = this._integralImage.GetRectangleSum(x, y, radius);
             Assert.AreEqual(sum, expectedSum);
         }
     }
