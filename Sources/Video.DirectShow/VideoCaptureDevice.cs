@@ -545,7 +545,9 @@ namespace AForge.Video.DirectShow
             {
                 // check source
                 if (string.IsNullOrEmpty(this._deviceMoniker))
-                    throw new ArgumentException("Video source is not specified.");
+                {
+                    throw new ArgumentNullException("Video source is not specified.");
+                }
 
                 this._framesReceived = 0;
                 this._bytesReceived = 0;
@@ -654,7 +656,9 @@ namespace AForge.Video.DirectShow
         {
             // check source
             if ((this._deviceMoniker == null) || (this._deviceMoniker == string.Empty))
+            {
                 throw new ArgumentException("Video source is not specified.");
+            }
 
             lock (this._sync)
             {
@@ -770,7 +774,7 @@ namespace AForge.Video.DirectShow
                     }
                 }
 
-                return (!this._isCrossbarAvailable.HasValue) ? false : this._isCrossbarAvailable.Value;
+                return this._isCrossbarAvailable ?? false;
             }
         }
 
@@ -811,7 +815,7 @@ namespace AForge.Video.DirectShow
             bool ret = true;
 
             // check if source was set
-            if ((this._deviceMoniker == null) || (string.IsNullOrEmpty(this._deviceMoniker)))
+            if (string.IsNullOrEmpty(this._deviceMoniker))
             {
                 throw new ArgumentException("Video source is not specified.");
             }
@@ -865,7 +869,7 @@ namespace AForge.Video.DirectShow
             bool ret = true;
 
             // check if source was set
-            if ((this._deviceMoniker == null) || (string.IsNullOrEmpty(this._deviceMoniker)))
+            if (string.IsNullOrEmpty(this._deviceMoniker))
             {
                 throw new ArgumentException("Video source is not specified.");
             }
@@ -911,7 +915,7 @@ namespace AForge.Video.DirectShow
         /// <param name="defaultValue">Receives the default value of the property.</param>
         /// <param name="controlFlags">Receives a member of the <see cref="CameraControlFlags"/> enumeration, indicating whether the property is controlled automatically or manually.</param>
         /// 
-        /// <returns>Returns true on sucee or false otherwise.</returns>
+        /// <returns>Returns true on success or false otherwise.</returns>
         /// 
         /// <exception cref="ArgumentException">Video source is not specified - device moniker is not set.</exception>
         /// <exception cref="ApplicationException">Failed creating device object for moniker.</exception>
@@ -923,7 +927,7 @@ namespace AForge.Video.DirectShow
             bool ret = true;
 
             // check if source was set
-            if ((this._deviceMoniker == null) || (string.IsNullOrEmpty(this._deviceMoniker)))
+            if (string.IsNullOrEmpty(this._deviceMoniker))
             {
                 throw new ArgumentException("Video source is not specified.");
             }
@@ -1059,9 +1063,11 @@ namespace AForge.Video.DirectShow
                 graph.AddFilter(snapshotGrabberBase, "grabber_snapshot");
 
                 // set media type
-                AMMediaType mediaType = new AMMediaType();
-                mediaType.MajorType = MediaType.Video;
-                mediaType.SubType = MediaSubType.RGB24;
+                AMMediaType mediaType = new AMMediaType
+                {
+                    MajorType = MediaType.Video,
+                    SubType = MediaSubType.RGB24
+                };
 
                 videoSampleGrabber.SetMediaType(mediaType);
                 snapshotSampleGrabber.SetMediaType(mediaType);
@@ -1246,10 +1252,7 @@ namespace AForge.Video.DirectShow
             catch (Exception exception)
             {
                 // provide information to clients
-                if (this.VideoSourceError != null)
-                {
-                    this.VideoSourceError(this, new VideoSourceErrorEventArgs(exception.Message));
-                }
+                this.VideoSourceError?.Invoke(this, new VideoSourceErrorEventArgs(exception.Message));
             }
             finally
             {
@@ -1300,10 +1303,7 @@ namespace AForge.Video.DirectShow
                 }
             }
 
-            if (this.PlayingFinished != null)
-            {
-                this.PlayingFinished(this, reasonToStop);
-            }
+            this.PlayingFinished?.Invoke(this, reasonToStop);
         }
 
         // Set resolution for the specified stream configuration
