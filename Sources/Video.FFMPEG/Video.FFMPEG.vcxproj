@@ -57,6 +57,11 @@
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
     </Xdcmake>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)$(OutDir)$(TargetFileName) $(SolutionDir)Release\
+xcopy /y $(SolutionDir)Externals\ffmpeg\bin\*.dll $(SolutionDir)Debug\
+xcopy /y $(SolutionDir)Externals\ffmpeg\bin\*.dll $(SolutionDir)Release\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -96,6 +101,12 @@
     <ProjectReference Include="..\Video\Video.csproj">
       <Project>{809725dc-6502-4732-a51c-deb7fea12975}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Externals\ffmpeg\bin\avcodec-53.dll" />
+    <None Include="..\..\Externals\ffmpeg\bin\avformat-53.dll" />
+    <None Include="..\..\Externals\ffmpeg\bin\avutil-51.dll" />
+    <None Include="..\..\Externals\ffmpeg\bin\swscale-2.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

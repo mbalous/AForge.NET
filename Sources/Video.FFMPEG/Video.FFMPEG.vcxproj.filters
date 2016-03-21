@@ -47,4 +47,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Externals\ffmpeg\bin\swscale-2.dll" />
+    <None Include="..\..\Externals\ffmpeg\bin\avformat-53.dll" />
+    <None Include="..\..\Externals\ffmpeg\bin\avcodec-53.dll" />
+    <None Include="..\..\Externals\ffmpeg\bin\avutil-51.dll" />
+  </ItemGroup>
 </Project>
